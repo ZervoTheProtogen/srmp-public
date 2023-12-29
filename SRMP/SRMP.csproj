@@ -496,6 +496,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Console\Console Commands.txt" />
+    <Content Include="modinfo.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>modinfo.json</LastGenOutput>
+    </Content>
     <Content Include="Properties\AssemblyInfo.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>AssemblyInfo.cs</LastGenOutput>
@@ -513,7 +517,11 @@
     <EmbeddedResource Include="srmultiplayer.dat" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="modinfo.json" />
+    <EmbeddedResource Include="modinfo.json">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>modinfo.tt</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
@@ -521,7 +529,13 @@
     </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>if "$(ConfigurationName)" == "Standalone" (
+"$(DevEnvDir)TextTransform.exe" "$(ProjectDir)Properties\AssemblyInfo.tt"
+"$(DevEnvDir)TextTransform.exe" "$(ProjectDir)modinfo.tt"
+)
+if "$(ConfigurationName)" == "SRML" (
+"$(DevEnvDir)TextTransform.exe" "$(ProjectDir)Properties\AssemblyInfo.tt"
+"$(DevEnvDir)TextTransform.exe" "$(ProjectDir)modinfo.tt"
+)</PreBuildEvent>
   </PropertyGroup>
 </Project>
