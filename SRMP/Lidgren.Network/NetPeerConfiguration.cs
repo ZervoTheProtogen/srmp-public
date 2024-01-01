@@ -35,12 +35,12 @@ namespace Lidgren.Network
 		//  -4 bytes to be on the safe side and align to 8-byte boundary
 		// Total 1408 bytes
 		// Note that lidgren headers (5 bytes) are not included here; since it's part of the "mtu payload"
-		
+
 		/// <summary>
 		/// Default MTU value in bytes
 		/// </summary>
 		public const int kDefaultMTU = 1408;
-		
+
 		private const string c_isLockedMessage = "You may not modify the NetPeerConfiguration after it has been used to initialize a NetPeer";
 
 		private bool m_isLocked;
@@ -48,6 +48,8 @@ namespace Lidgren.Network
 		private string m_networkThreadName;
 		private IPAddress m_localAddress;
 		private IPAddress m_broadcastAddress;
+        private bool m_dualStack;
+
 		internal bool m_acceptIncomingConnections;
 		internal int m_maximumConnections;
 		internal int m_defaultOutgoingMessageCapacity;
@@ -341,10 +343,26 @@ namespace Lidgren.Network
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets the local broadcast address to use when broadcasting
-		/// </summary>
-		public IPAddress BroadcastAddress
+        /// <summary>
+        /// Gets or sets a value indicating whether the library should use IPv6 dual stack mode.
+        /// If you enable this you should make sure that the <see cref="LocalAddress"/> is an IPv6 address.
+        /// Cannot be changed once NetPeer is initialized.
+        /// </summary>
+        public bool DualStack
+        {
+            get { return m_dualStack;  }
+            set
+            {
+                if (m_isLocked)
+                    throw new NetException(c_isLockedMessage);
+                m_dualStack = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the local broadcast address to use when broadcasting
+        /// </summary>
+        public IPAddress BroadcastAddress
 		{
 			get { return m_broadcastAddress; }
 			set

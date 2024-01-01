@@ -70,7 +70,8 @@ namespace SRMultiplayer
                         !assembly.GetName().Name.Contains("Logger") && !assembly.GetName().Name.Contains("Mono.") && !assembly.GetName().Name.Contains("Harmony") &&
                         !assembly.GetName().Name.Equals("SRML") && !assembly.GetName().Name.Equals("SRML.Editor") && !assembly.GetName().Name.Equals("Newtonsoft.Json") &&
                         !assembly.GetName().Name.Equals("INIFileParser") && !assembly.GetName().Name.Equals("SRMultiplayer") && !assembly.GetName().Name.Contains("Microsoft.") &&
-                        !assembly.GetName().Name.Equals("SRMP") && !assembly.GetName().Name.Equals("XGamingRuntime") && !Globals.UserData.IgnoredMods.Contains(assembly.GetName().Name))
+                        !assembly.GetName().Name.Equals("SRMP") && !assembly.GetName().Name.Equals("XGamingRuntime") && !assembly.GetName().Name.Contains("MonoMod.Utils.") 
+                        && !Globals.UserData.IgnoredMods.Contains(assembly.GetName().Name))
                     {
                         mods.Add(assembly.GetName().Name);
                     }
