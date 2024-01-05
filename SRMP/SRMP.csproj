@@ -513,6 +513,11 @@
       <HintPath>..\Libs\SRML.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'SRML NoVer|AnyCPU' ">
+    <Reference Include="SRML">
+      <HintPath>..\Libs\SRML.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="srmultiplayer.dat" />
   </ItemGroup>
