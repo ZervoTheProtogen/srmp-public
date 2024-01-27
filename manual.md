@@ -81,21 +81,21 @@ If you want an explanation to a specific entry in the table, select the operatin
 <!-- REMEMBER: If you updated the table above, also update the explanation below. -->
 
 <details>
-<summary>Windows</summary>
+<summary>:window: Windows</summary>
     <details>
-        <summary>:window: Windows: Steam</summary>
+        <summary>- Steam</summary>
         🟢 Compatible: The game runs natively on Windows and Steam, no issues should be caused by this combination.
     </details>
     <details>
-        <summary>Windows: Epic Games</summary>
+        <summary>- Epic Games</summary>
         🟢 Compatible: The game runs natively on Windows and Epic Games, no issues should be caused by this combination.
     </details>
     <details>
-        <summary>Windows: GoG</summary>
+        <summary>- GoG</summary>
         🟢 Compatible: The game runs natively on Windows and GoG, no issues should be caused by this combination.
     </details>
     <details>
-        <summary>Windows: Microsoft Store</summary>
+        <summary>- Microsoft Store</summary>
         🔴 Incompatible: As with everything else from the Microsoft Store, this version of the game is scuffed.
     </details>
 </details>
@@ -103,19 +103,19 @@ If you want an explanation to a specific entry in the table, select the operatin
 <details>
 <summary>:penguin: Linux</summary>
     <details>
-        <summary>Linux: Steam</summary>
+        <summary>- Steam</summary>
         🟢 Compatible: By using proton and then installing the mod as you would on windows, you get the same performance and probably no issues.
     </details>
     <details>
-        <summary>Linux: Epic Games</summary>
+        <summary>- Epic Games</summary>
         🟡 Kinda works: So far only tested through Heroic Games Launcher as well as Lutris. I have had broken UI but that could likely be due to how bad my old setup was. Seems to have slightly worse performance than on Steam but it is likely not an issue with SRMP and that difference was pretty much eliminated for me after enabling virtual desktop.
     </details>
     <details>
-        <summary>Linux: GoG</summary>
+        <summary>- GoG</summary>
         🟡 Kinda works: I've only done minimal testing but from what the information I gathered there didn't seem to be any issues. Will still put this as Kinda works until I gather more data.
     </details>
     <details>
-        <summary>Linux: Microsoft Store</summary>
+        <summary>- Microsoft Store</summary>
         🔴 Incompatible: Good luck getting Microsoft Store working on linux. Even if you did, this version doesn't work with the mod.
     </details>
 </details>
@@ -123,19 +123,19 @@ If you want an explanation to a specific entry in the table, select the operatin
 <details>
 <summary>:apple: Mac</summary>
     <details>
-        <summary>Mac: Steam</summary>
+        <summary>- Steam</summary>
         ⚪ Unknown: Not tested (by the original manual author) yet. Not enough data to cover this entry.
     </details>
     <details>
-        <summary>Mac: Epic Games</summary>
+        <summary>- Epic Games</summary>
         ⚪ Unknown: Not tested (by the original manual author) yet. Not enough data to cover this entry.
     </details>
     <details>
-        <summary>Mac: GoG</summary>
+        <summary>- GoG</summary>
         ⚪ Unknown: Not tested (by the original manual author) yet. Not enough data to cover this entry.
     </details>
     <details>
-        <summary>Mac: Microsoft Store</summary>
+        <summary>- Microsoft Store</summary>
         🔴 Incompatible: Good luck getting Microsoft Store working on Mac. Even if you did, this version doesn't work with the mod.
     </details>
 </details>
@@ -146,7 +146,8 @@ By using the SRML version of SRMP, it is possible to play with other mods. Keep 
 
 <details>
 <summary>SRMP+SRML mod compatibility list</summary>
-
+  
+‎
 **_This list may be outdated, it is currently based on information found [here](https://docs.google.com/document/d/1JsofvJNLPK5r3XIF-MHBLWBKDzB8GUmGcia9eVnYvJ4)._** I will update it with new information as I receive it. If you want to help, please follow the testing procedure described in the document I just linked. Feel free to give us any information you have to contribute with on discord, or contribute directly to this document if you feel comfortable doing that.
 
 | Mod Name                                                                     | Compatible | Date Updated | Mod Ver. | SRMP Ver. | Tested By  | Notes                    |
@@ -217,24 +218,26 @@ The most obvious place to get the mod is probably from this github repo, head ov
 
 Now that you have downloaded the mod it is time to install it. Remember that these instructions are for the Standalone version, SRML version is installed like other SRML mods and therefor instructions are not provided here. Troubleshooting tips may still apply to SRML version. Now follow the steps for your OS and platform.
 
-### Windows
+### :window: Windows
 
 <!-- Decided to put instructions in details tags to reduce the amount of scrolling needed -->
 <details>
     <summary>TL;DR</summary>
-    Find the game installation directory, extract the downloaded zip file into that directory replacing files inside. Done.
+    Find the game directory, extract the downloaded zip file into that directory. You should be prompted if you want to replace some files. Click yes. Done.
 </details>
 
 <details>
-<summary>1. Finding the game installation directory</summary>
-The first step to installing the mod is to know where to install it to. We need to find the game installation directory (we will refer to it as GID from now on). This is done a little different depending on which platform (aka launcher) you have the game on. If you have it on multiple and one of them is steam, use steam. If you pirated the game, get out of my manual. Read the section for your launcher.
+<summary>:one:. Finding the game directory</summary>
+The first step to installing the mod is to know where to install it to. We need to find the game directory (we will refer to it as GD from now on). This is done a little different depending on which platform (aka launcher) you have the game on. Steam is preferred. If you pirated the game, get out of my manual. Read the section for your launcher.
     <details>
     <summary>> 1.a. Steam</summary>
-    It is really easy to find the GID on Steam, it only takes a few clicks. Open your library and find Slime Rancher in the list. Rightclick it, hover over ‘Manage’ and click ‘Browse local files’. This should open the explorer (or your default file explorer) in the GID. You know it is the correct directory if it contains a folder called SlimeRancher_Data.
+    <!-- Thanks to Stepy in the discord for this screenshot lol, I own the game on epic, not steam (unfortunately). -->
+    ![srmpInstallLocateGIDSteam](./screenshots/srmp-install-locate-gid-steam.png)
+    To find the GD on Steam, open your library and find Slime Rancher in the list. Right-click it, hover over ‘Manage’ and click ‘Browse local files’. This should open the explorer (or your default file explorer) in the GD. You know it is the correct directory if it contains a folder called SlimeRancher_Data.
     </details>
     <details>
     <summary>1.b. Epic Games</summary>
-    Finding the GID on Epic Games can be a little more complicated, as they aren’t installed to a universal location. The easiest thing is to initialize an install for another game and check what the pre-selected installation directory is, cancel the install and then check that directory for your GID. You know it is the correct directory if it contains a folder called SlimeRancher_Data. Another way to find it is to check the path of the Slime Rancher desktop entry/shortcut, or to just reinstall the game to a known location.
+    Finding the GD on Epic Games can be a little more complicated, as they aren’t installed to a universal location. The easiest thing is to initialize an install for another game and check what the pre-selected installation directory is, cancel the install and then check that directory for your GD. You know it is the correct directory if it contains a folder called SlimeRancher_Data. Another way to find it is to check the path of the Slime Rancher desktop entry/shortcut, or to just reinstall the game to a known location.
     </details>
     <details>
     <summary>1.c. GoG</summary>
@@ -243,34 +246,34 @@ The first step to installing the mod is to know where to install it to. We need 
 </details>
 
 <details>
-<summary>2. Installing the mod</summary>
-Once you know the GID (game installation directory) of your game you can move on to actually installing the mod. First up, make sure you have your GID open in a file explorer. Again the GID can be identified by having a subdirectory called SlimeRancher_Data. Next, open the directory containing the downloaded mod zip archive (probably Downloads). Copy or move the zip into the GID, not into SlimeRancher_Data or another folder inside of the GID, but the GID itself. Now that the zip archive is in place, extract it by right-clicking and selecting ‘extract here’. It should ask to replace a file in SlimeRancher_Data, if it does then select yes, if it doesn’t then you have extracted it to the wrong directory or you just need to move it out of a folder first. Once extracted correctly, it should have replaced a file in SlimeRancher_Data and created a new folder called Mods (do not put other mods in here). That’s it! Now move on to step 3.
+<summary>:two:. Installing the mod</summary>
+Once you know the GD (game directory) of your game you can move on to actually installing the mod. First, make sure you have your GD open in a file explorer. Again the GD can be identified by having a subdirectory called SlimeRancher_Data. Next, open the directory containing the downloaded mod zip archive (probably Downloads). Copy or move the zip into the GD, not into SlimeRancher_Data or another folder inside of the GD, but the GD itself. Now that the zip archive is in place, extract it by right-clicking and selecting ‘extract here’. It should ask to replace a file in SlimeRancher_Data, if it does then select yes, if it doesn’t then you have extracted it to the wrong directory or you just need to move it out of a folder first. Once extracted correctly, it should have replaced a file in SlimeRancher_Data and created a new folder called Mods (do not put other mods in here). That’s it! Now move on to step 3.
 </details>
 
 <details>
-<summary>3. Verifying the install</summary>
+<summary>:three:. Verifying the install</summary>
 Now to test if everything has installed correctly. Start the game from your launcher and wait for it to load. If installed correctly a console window will also open that probably takes focus from the game. Do not panic, this is a feature and the game is still running in another window. Once in the main menu, you should see a gray box in the top-right. If you do, you did everything correctly. If you don’t, try pressing f4 and if it still doesn’t show up then you did something wrong, go back. Now that you have the mod installed correctly, you can enter a username in the gray box, it can be anything and will be the name shown in-game. Now that the mod is installed and working you can move on to using the mod.
 </details>
 
-### Linux
+### :penguin: Linux
 
 <!-- Unless someone else does it, I will update this section to be a lot more detailed and easier to understand in the future. -->
 
 <details>
 <summary>TL;DR</summary>
-Find the game installation directory, extract the downloaded zip file into that directory replacing files inside. Done.
+Get Slime Rancher to run without the mod first. Find the game directory, extract the downloaded zip file into that directory. You should be prompted if you want to replace some files. Click yes. Done.
 
 ![smrpInstallShortLinux](./screenshots/srmp-install-short-linux.jpg)
 
 </details>
 
 <details>
-<summary>1. Getting the game to run</summary>
+<summary>:one:. Getting the game to run</summary>
 In case you haven't already, it is strongly recommended to get the game running properly without issues before moving on to modding. I won't go into detail on how to do that here, but if you have it on steam        then use proton. If you have it on Epic Games or GoG then use Lutris, Heroic Games Launcher or a similar solution. Tweak until it runs properly.
 </details>
 
 <details>
-<summary>2. Finding the game installation directory</summary>
+<summary>:two:. Finding the game directory</summary>
 
 ![srmpInstallIdentifyGID](./screenshots/srmp-install-identify-gid.jpg)
 
@@ -284,20 +287,20 @@ You know it's the correct directory if it contains another directory called "Sli
 </details>
 
 <details>
-<summary>3. Installing the mod</summary>
+<summary>:three:. Installing the mod</summary>
 
 ![srmpInstallBigLinux](./screenshots/srmp-intall-big-linux.jpg)
 
-Once you know the GID (game installation directory) of your game you can move on to actually installing the mod. First up, make sure you have your GID open in a file explorer. Again the GID can be identified by having a subdirectory called SlimeRancher_Data. Next, open the directory containing the downloaded mod zip archive (probably Downloads). Copy or move the zip into the GID, not into SlimeRancher_Data or another folder inside of the GID, but the GID itself. Now that the zip archive is in place, extract it into this directory. It should ask to replace a file in SlimeRancher_Data, if it does then select yes, if it doesn’t then you have extracted it to the wrong directory or you just need to move it out of a folder first. Once extracted correctly, it should have replaced a file in SlimeRancher_Data and created a new folder called Mods (do not put other mods in here). That’s it! Now move on to step 4.
+Once you know the GD (game directory) of your game you can move on to actually installing the mod. First, make sure you have your GD open in a file explorer. Again the GD can be identified by having a subdirectory called SlimeRancher_Data. Next, open the directory containing the downloaded mod zip archive (probably Downloads). Copy or move the zip into the GD, not into SlimeRancher_Data or another folder inside of the GD, but the GD itself. Now that the zip archive is in place, extract it into this directory. You should be prompted to replace a file in SlimeRancher_Data, if it does then select yes, if it doesn’t then you have extracted it to the wrong directory or you just need to move it out of a folder first. Once extracted correctly, it should have replaced a file in SlimeRancher_Data and created a new folder called Mods (do not put other mods in here). That’s it! Now move on to step 4.
 
 </details>
 
 <details>
-<summary>4. Verifying the install</summary>
+<summary>:four:. Verifying the install</summary>
 Now to test if everything has installed correctly. Start the game from your launcher and wait for it to load. If installed correctly a console window will also open that probably takes focus from the game. Do not panic, this is a feature and the game is still running in another window. Once in the main menu, you should see a gray box in the top-right. If you do, you did everything correctly. If you don’t, try pressing f4 and if it still doesn’t show up then you did something wrong, go back. Now that you have the mod installed correctly, you can enter a username in the gray box, it can be anything and will be the name shown in-game. Now that the mod is installed and working you can move on to using the mod.
 </details>
 
-### Mac
+### :apple: Mac
 
 As I (zervó) have never touched a Mac in my life, I have no idea how this works. Please update on this section.
 
@@ -309,7 +312,7 @@ As I (zervó) have never touched a Mac in my life, I have no idea how this works
 
 Since this mod is all about multiplayer, here are some instructions for playing togheter. There are 4 main methods to choose from: Server Codes, Playing over LAN, Playing over “fake” LAN (VPN), and Playing over the Internet (port forwarding). The options are ranked below from easiest to hardest.
 
-All four methods except server codes have a few things in common. First, make sure to choose a username if you haven’t already, this can be anything and will be the name shown in-game. Second, all three methods use some combination of IP address and port to host and join. An Ipv4 address which is the type you will most likely be using, looks like this: xxx.xxx.xxx.xxx, with x being numbers. Common ones for private IPs (local networks) are 192.168.x.xxx and 10.10.x.xxx. EG 192.168.1.43, 192.168.68.26 or 10.10.1.107. Public IPs (external/WAN connections) usually have completely different numbers but the structure is the same. The port is a combination of 5 numbers, which the host can find once they are in a loaded save.
+All four methods except server codes have a few things in common. First, make sure to choose a username if you haven’t already, this can be anything and will be the name shown in-game. Second, all three methods use some combination of IP address and port to host and join. An IPV4 address which is the type you will most likely be using, looks like this: xxx.xxx.xxx.xxx, with x being numbers. Common ones for private IPs (local networks) are 192.168.x.xxx and 10.10.x.xxx. EG 192.168.1.43, 192.168.68.26 or 10.10.1.107. Public IPs (external/WAN connections) usually have completely different numbers but the structure is the same. The port is a combination of 5 numbers, which the host can find once they are in a loaded save.
 
 Note down the port before attempting any of the methods, or use a method with a port that you choose and change the port in the game later.
 
@@ -351,7 +354,7 @@ If you aren’t on the same network then there is still a pretty simple way to d
 The third and most advanced option is port forwarding, but it is also the one giving the best results if all players aren’t on the same network. There are two ways to port forward: via your router’s admin interface or through a UPnP portmapping client. The second one is easiest and most convenient, but not all routers support it, it could also pose a potential security risk. I would recommend trying UPnP first as it is pretty easy with the client I will be using, and try to do it via the admin interface if UPnP doesn’t work. Using a UPnP client doesn't make the security problems with UPnP bigger, because if it works then it is already enabled in your router which means the security flaws are already present.
 
 <details>
-<summary>Option 1: Via the router's admin interface</summary>
+<summary>Option 1: Via the router's web interface</summary>
     
 This method of port forwarding is the most complicated of the two, to be honest the UPnP client I used in those instructions isn’t even complicated at all so try that one first if you haven’t already. Now, to get started with this method you need login credentials for your router. They are usually found on a sticker on the back of the router. There might be one for wifi credentials and one for admin credentials so doublecheck that you have the right one. If you are lucky there is a default address listed on the sticker as well (usually called “internal address” or just “ipv4 address”) that will save you some time by skipping the next part of the instruction, finding your router’s local ip.
 
@@ -380,11 +383,11 @@ Open System Preferences, navigate to Network > Advanced > TCP/IP, and find the I
 </details>
 ‎
 
-Now that you have the IP of your router, open a web browser and put it into the address field (do not search for it, enter it as an address). It should open a webpage, if it doesn’t and just searches instead, put http:// in front of the address. Now log in with the credentials you found earlier, some routers display a default status page and requires you to press something before showing the login prompt.
+Now that you have the IP of your router, open a web browser and put it into the address field (do not search for it, enter it as an address). It should open a webpage, if it doesn’t and just searches instead, put http:// in front of the address. Now log in with the credentials you found earlier. Note that some routers display a default status page and requires you to press something before showing the login prompt.
 
 ![srmpUseHostPortforwardLogin](./screenshots/srmp-use-host-portforward-login.jpg)
 
-Once you are logged in try to find the port forwarding section, for me it was under “NAT/QoS”. It will look a little different on every router. Add a new rule.
+Once you are logged in try to find the port forwarding section, it might be labeled something like "NAT" or just "Port Forward". It will look a little bit different on every router. Add a new rule.
 
 ![srmpUseHostPortforwardAdd](./screenshots/srmp-use-host-portforward-add.jpg)
 
@@ -506,7 +509,7 @@ Here is a bunch of scenarios where some things with the mod might not work for d
 
 <details>
 <summary>Players are invisible</summary>
-If you are using Hamachi, Radmin or a similar solution then this is likely caused by rate limiting. The mod uses a lot of network traffic, especially when loading. One solution you could try is to disable encryption in Hamachi or whatever solution you are using, or if possible changing/removing any limits. If it doesn’t help immediately then wait a bit. If you have waited for a while and nothing has changed then you probably want to use another method in [using the mod](#using-the-mod). If you have tried everything up to port forwarding and it still doesn’t work then there is something on your network limiting your connection or your network/internet connection is just slow. Try to let someone else be the host.
+If you are using Hamachi, Radmin or a similar solution then this is likely caused by rate limiting. The mod uses a lot of network traffic, especially when loading. One solution you could try is to disable encryption in Hamachi or whatever solution you are using, or if possible changing/removing any limits. If it doesn’t help immediately then wait a bit. If you have waited for a while and nothing has changed then you probably want to use another method described in [using the mod](#using-the-mod). If you have tried everything up to port forwarding and it still doesn’t work then there is something on your network limiting your connection or your network/internet connection is just slow. Try letting someone else host.
 </details>
 
 <details>
@@ -523,6 +526,8 @@ This bug should be fixed in version 1510 and upward thanks to [Twirlbug](https:/
 <summary>DLC Mismatch</summary>
 This is a common connection error caused by players not having the same DLC activated. This can be solved by deactivating all DLCs or all players getting the same DLCs.
 If all players have the same dlc or if they are all deactivated, this can also be solved by going in to the "Manage DLC" menu before hosting/joining.
+
+You can also disable DLC check in the userdata.json file found in the SRMP directory.
 </details>
 
 <details>
@@ -560,4 +565,4 @@ Contact me if you need help with the manual or just the mod in general.
 
 The mod was created by the amazing [Saty](https://github.com/SatyPardus), she has done an outstanding job and deserves some recognition. Thank you Saty!
 
-The mod is currently maintainted by [Twirlbug](https://github.com/Twirlbug), thank you Twirlbug for picking up development on this mod!
+The mod was further worked on by [Twirlbug](https://github.com/Twirlbug), who helped with bugfixes. Thank you Twirlbug for the continued development on this mod!
