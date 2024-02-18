@@ -500,6 +500,7 @@ This window can be quite handy for debugging, and can also be used to enter comm
 | tp [(TargetPlayer)] [DestinationPlayer] |        teleports target to dest player        |      Unknown       |
 | listplayers                             |     prints current players to the console     |      Unknown       |
 | sleep [hours]                           |        fastforward given in-game hours        |      Unknown       |
+| console [enable/disable] [type]         | enable/disable console logging of given type  |      Unknown       |    
 
 ## Troubleshooting
 
