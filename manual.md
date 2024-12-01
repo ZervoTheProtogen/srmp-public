@@ -302,7 +302,57 @@ Now to test if everything has installed correctly. Start the game from your laun
 
 ### :apple: Mac
 
-As I (zervó) have never touched a Mac in my life, I have no idea how this works. Please update on this section.
+These instructions are currently written for steam only.
+Thanks to *mervin_a_* on the discord for providing the info for this guide!
+
+<details>
+<summary>TL;DR</summary>
+Get the game to run first, then the rest is easy. Download Whisky and launch Steam via Whisky. Download the game via the Whisky version of Steam. Browse local files for the game and extract the standalone version into the files like you normally would on other OSes.
+    
+</details>
+
+<details>
+<summary>:one:. Getting the game to run</summary>
+First of all you need to get the game to run properly before you start modding it. Once this is done, the modding part is easy.
+
+Download and install [Whisky](https://github.com/Whisky-App/Whisky). This allows you to run windows software under mac.
+Launch Steam via Whisky (you can google details for this if you get lost).
+
+In the Whisky version of Steam, install Slime Rancher. Then try running it and see if it works!
+If it does you can move on to the next step.
+</details>
+
+<details>
+<summary>:two:. Finding the game directory</summary>
+
+This should be pretty easy, just browse the local files of the game as you normally would in steam. This should open up the directory you need.
+
+![srmpInstallLocateGidSteam](./screenshots/srmp-install-locate-gid-steam.png)
+
+You know it's the right directory if it has a subfolder called 'SlimeRancher_Data', together with some other stuff. Example below.
+
+![srmpInstallIdentifyGID](./screenshots/srmp-install-identify-gid.jpg)
+</details>
+
+<details>
+<summary>:three:. Installing the mod</summary>
+
+For this step, you apparently cannot just drag the files into the explorer like you normally would.
+Instead, you need to copy and paste the SRMP zip file into the Game Directory that you identified in the previous step.
+
+After this, the only thing you need to do is extracting the zip file **into** the game directory.
+You know it's the right directory if it prompts you to replace some files (SRMP does this in order to load the mod).
+
+If all of this went smoothly, you can go ahead and test the mod.
+</details>
+
+<details>
+<summary>:four:. Verifying the install</summary>
+    
+Now to test if everything has installed correctly. Start the game from Steam (via Whisky). If installed correctly a console window might also open that probably takes focus from the game. Do not panic, this is a feature and the game is still running in another window. Once in the main menu, you should see a gray box in the top-right. If you do, you did everything correctly. If you don’t, try pressing f4 and if it still doesn’t show up then you did something wrong, go back. Now that you have the mod installed correctly, you can enter a username in the gray box, it can be anything and will be the name shown in-game. Now that the mod is installed and working you can move on to using the mod.
+
+NOTE: If the text in the gray box is invisible, you need to install the ms arial font and start the game again. You might have to install this *via* Whisky, but I'm not sure.
+</details>
 
 ## Using the mod
 
