@@ -150,43 +150,43 @@ By using the SRML version of SRMP, it is possible to play with other mods. Keep 
 ‎
 **_This list may be outdated, it is currently based on information found [here](https://docs.google.com/document/d/1JsofvJNLPK5r3XIF-MHBLWBKDzB8GUmGcia9eVnYvJ4)._** I will update it with new information as I receive it. If you want to help, please follow the testing procedure described in the document I just linked. Feel free to give us any information you have to contribute with on discord, or contribute directly to this document if you feel comfortable doing that.
 
-| Mod Name                                                                     | Compatible | Date Updated | Game Ver. | Mod Ver. | SRMP Ver. | Tested By  | Notes                    |
-| :--------------------------------------------------------------------------- | :--------- | :----------: | :------: | :-------: | :-------: |:--------: | :----------------------- |
-| [AshAndSteam](https://www.nexusmods.com/slimerancher/mods/101)               | 🔴 No      |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | duplicate key            |
-| [BubbleSlimes](https://www.nexusmods.com/slimerancher/mods/100)              | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [Elemental Slimes](https://www.nexusmods.com/slimerancher/mods/129)          | 🔴 No      |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | duplicate key            |
-| [FireSlimeFixes](https://www.nexusmods.com/slimerancher/mods/268)            | 🔴 No      |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | duplicate key            |
-| [FrostysQuicksliverRancher](https://www.nexusmods.com/slimerancher/mods/130) | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [GemSlimes](https://www.nexusmods.com/slimerancher/mods/104)                 | 🔴 No      |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | duplicate key            |
-| [ItemShop](https://www.nexusmods.com/slimerancher/mods/285)                  | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [KeepInventory](https://www.nexusmods.com/slimerancher/mods/305)             | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [Largo Fix](https://www.nexusmods.com/slimerancher/mods/132)                 | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [Largo Library](https://www.nexusmods.com/slimerancher/mods/105)             | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [LuckyPlorts](https://www.nexusmods.com/slimerancher/mods/65)                | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [MainMenuIsland](https://www.nexusmods.com/slimerancher/mods/184)            | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [MarketExpansion](https://www.nexusmods.com/slimerancher/mods/87)            | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [MemorizingFeeder](https://www.nexusmods.com/slimerancher/mods/311)          | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [MoreCorralUpgrades](https://www.nexusmods.com/slimerancher/mods/292)        | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | some users report issues |
-| [MoreGordos](https://www.nexusmods.com/slimerancher/mods/131)                | 🔴 No      |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | duplicate key            |
-| [MoreTitles](https://www.nexusmods.com/slimerancher/mods/322)                | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [MoreVaccables](https://www.nexusmods.com/slimerancher/mods/4)               | 🟡 Kinda   |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | possible duping          |
-| [MoreVaccablesPatch](https://www.nexusmods.com/slimerancher/mods/328)        | 🟡 Kinda   |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | possible duping          |
-| [MoSecretStyles](https://www.nexusmods.com/slimerancher/mods/288)            | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [PowerVaccing](https://www.nexusmods.com/slimerancher/mods/289)              | 🟡 Kinda   |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | possible duping          |
-| [SaberBlob](https://www.nexusmods.com/slimerancher/mods/323)                 | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [SecretStyleRemovalSafety](https://www.nexusmods.com/slimerancher/mods/288)  | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [SecretStyleThings](https://www.nexusmods.com/slimerancher/mods/249)         | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [ShinySlimes](https://www.nexusmods.com/slimerancher/mods/34)                | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [SingularitySlimes](https://www.nexusmods.com/slimerancher/mods/21)          | 🔴 No      |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | duplicate key            |
-| [SlimePondUpgrades](https://www.nexusmods.com/slimerancher/mods/281)         | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [SlimeAndMarket](https://www.nexusmods.com/slimerancher/mods/118)            | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [SmartVacpack](https://www.nexusmods.com/slimerancher/mods/306)              | 🟡 Kinda   |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | possible duping          |
-| [SplitterSlimes](https://www.nexusmods.com/slimerancher/mods/258)            | 🔴 No      |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | duplicate key            |
-| [SRMLRegistryFixes](https://www.nexusmods.com/slimerancher/mods/236)         | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [UpgradeTabs](https://www.nexusmods.com/slimerancher/mods/309)               | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                          |
-| [ZoneUI](https://www.nexusmods.com/slimerancher/mods/167)                    | 🟡 Kinda   |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | doesn't show mod slimes  |
-| [DimensionWarpSlimes](https://www.nexusmods.com/slimerancher/mods/301)       | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | AceGalaxy  |                          |
-| [ExtraVacSlots](https://www.nexusmods.com/slimerancher/mods/219)             | 🔴 No      |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | doesn't behave at all    |
+| Mod Name                                                                     | Compatible | Date Updated | Game Ver. | Mod Ver. | SRMP Ver. | Tested By  | Notes                     |
+| :--------------------------------------------------------------------------- | :--------- | :----------: | :------: | :-------: | :-------: |:--------: | :------------------------- |
+| [AshAndSteam](https://www.nexusmods.com/slimerancher/mods/101)               | 🔴 No      |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | duplicate key              |
+| [BubbleSlimes](https://www.nexusmods.com/slimerancher/mods/100)              | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [Elemental Slimes](https://www.nexusmods.com/slimerancher/mods/129)          | 🔴 No      |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | duplicate key              |
+| [FireSlimeFixes](https://www.nexusmods.com/slimerancher/mods/268)            | 🔴 No      |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | duplicate key              |
+| [FrostysQuicksliverRancher](https://www.nexusmods.com/slimerancher/mods/130) | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [GemSlimes](https://www.nexusmods.com/slimerancher/mods/104)                 | 🔴 No      |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | duplicate key              |
+| [ItemShop](https://www.nexusmods.com/slimerancher/mods/285)                  | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [KeepInventory](https://www.nexusmods.com/slimerancher/mods/305)             | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [Largo Fix](https://www.nexusmods.com/slimerancher/mods/132)                 | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [Largo Library](https://www.nexusmods.com/slimerancher/mods/105)             | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [LuckyPlorts](https://www.nexusmods.com/slimerancher/mods/65)                | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [MainMenuIsland](https://www.nexusmods.com/slimerancher/mods/184)            | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [MarketExpansion](https://www.nexusmods.com/slimerancher/mods/87)            | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [MemorizingFeeder](https://www.nexusmods.com/slimerancher/mods/311)          | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [MoreCorralUpgrades](https://www.nexusmods.com/slimerancher/mods/292)        | 🟡 Kinda   |  2024-12-02  |  1.4.4   |  Unknown  |  0.2.1c   |  Popommy   | causes desyncs (landplots) |
+| [MoreGordos](https://www.nexusmods.com/slimerancher/mods/131)                | 🔴 No      |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | duplicate key              |
+| [MoreTitles](https://www.nexusmods.com/slimerancher/mods/322)                | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [MoreVaccables](https://www.nexusmods.com/slimerancher/mods/4)               | 🟡 Kinda   |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | possible duping            |
+| [MoreVaccablesPatch](https://www.nexusmods.com/slimerancher/mods/328)        | 🟡 Kinda   |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | possible duping            |
+| [MoSecretStyles](https://www.nexusmods.com/slimerancher/mods/288)            | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [PowerVaccing](https://www.nexusmods.com/slimerancher/mods/289)              | 🟡 Kinda   |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | possible duping            |
+| [SaberBlob](https://www.nexusmods.com/slimerancher/mods/323)                 | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [SecretStyleRemovalSafety](https://www.nexusmods.com/slimerancher/mods/288)  | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [SecretStyleThings](https://www.nexusmods.com/slimerancher/mods/249)         | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [ShinySlimes](https://www.nexusmods.com/slimerancher/mods/34)                | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [SingularitySlimes](https://www.nexusmods.com/slimerancher/mods/21)          | 🔴 No      |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | duplicate key              |
+| [SlimePondUpgrades](https://www.nexusmods.com/slimerancher/mods/281)         | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [SlimeAndMarket](https://www.nexusmods.com/slimerancher/mods/118)            | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [SmartVacpack](https://www.nexusmods.com/slimerancher/mods/306)              | 🟡 Kinda   |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | possible duping            |
+| [SplitterSlimes](https://www.nexusmods.com/slimerancher/mods/258)            | 🔴 No      |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | duplicate key              |
+| [SRMLRegistryFixes](https://www.nexusmods.com/slimerancher/mods/236)         | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [UpgradeTabs](https://www.nexusmods.com/slimerancher/mods/309)               | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy |                            |
+| [ZoneUI](https://www.nexusmods.com/slimerancher/mods/167)                    | 🟡 Kinda   |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | doesn't show mod slimes    |
+| [DimensionWarpSlimes](https://www.nexusmods.com/slimerancher/mods/301)       | 🟢 Yes     |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | AceGalaxy  |                            |
+| [ExtraVacSlots](https://www.nexusmods.com/slimerancher/mods/219)             | 🔴 No      |   2022-?-?   | Unknown  |  Unknown  |  Unknown  | ClaraCrazy | doesn't behave at all      |
 
 NOTE: A mod being listed as compatible doesn't mean it will work well.
 
