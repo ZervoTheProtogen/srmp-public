@@ -533,14 +533,27 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
+  <!-- You need to install text-transform: dotnet tool install -g dotnet-t4 -->
   <PropertyGroup>
-    <PreBuildEvent>if "$(ConfigurationName)" == "Standalone" (
-"$(DevEnvDir)TextTransform.exe" "$(ProjectDir)Properties\AssemblyInfo.tt"
-"$(DevEnvDir)TextTransform.exe" "$(ProjectDir)modinfo.tt"
-)
-if "$(ConfigurationName)" == "SRML" (
-"$(DevEnvDir)TextTransform.exe" "$(ProjectDir)Properties\AssemblyInfo.tt"
-"$(DevEnvDir)TextTransform.exe" "$(ProjectDir)modinfo.tt"
-)</PreBuildEvent>
+    <PreBuildEvent Condition="'$(OS)' == 'Windows_NT'">
+      if "$(ConfigurationName)" == "Standalone" (
+      "%USERPROFILE%\.dotnet\tools\t4" "$(ProjectDir)Properties\AssemblyInfo.tt"
+      "%USERPROFILE%\.dotnet\tools\t4" "$(ProjectDir)modinfo.tt"
+      )
+      if "$(ConfigurationName)" == "SRML" (
+      "%USERPROFILE%\.dotnet\tools\t4" "$(ProjectDir)Properties\AssemblyInfo.tt"
+      "%USERPROFILE%\.dotnet\tools\t4" "$(ProjectDir)modinfo.tt"
+      )
+    </PreBuildEvent>
+    <PreBuildEvent Condition="'$(OS)' != 'Windows_NT'">
+      if [ "$(ConfigurationName)" = "Standalone" ]; then
+      "/home/$USER/.dotnet/tools/t4" "$(ProjectDir)Properties/AssemblyInfo.tt"
+      "/home/$USER/.dotnet/tools/t4" "$(ProjectDir)modinfo.tt"
+      fi
+      if [ "$(ConfigurationName)" = "SRML" ]; then
+      "/home/$USER/.dotnet/tools/t4" "$(ProjectDir)Properties/AssemblyInfo.tt"
+      "/home/$USER/.dotnet/tools/t4" "$(ProjectDir)modinfo.tt"
+      fi
+    </PreBuildEvent>
   </PropertyGroup>
 </Project>

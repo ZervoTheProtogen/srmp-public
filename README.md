@@ -8,9 +8,11 @@ Check out the #srmp-github channel for collaboration!
 The user manual which includes compatability information, download and installation instructions and standard troubleshooting can be found [here](/manual.md).
 
 ## How to setup your development enviroment
-- Clone the repository and open it in VS2022
+- Clone the repository and open it in VS2022 or Rider
 - Go to the project properties->Reference Paths
 - Add your Slime Rancher managed path to it (Example: C:\Program Files (x86)\Steam\steamapps\common\Slime Rancher\SlimeRancher_Data\Managed\)
+
+You also need text-transform, install it for your user: `dotnet tool install -g dotnet-t4`
 
 To build, select either the "Standalone" or "SRML" build option, depending on which modloader you got installed.
 
