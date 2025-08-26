@@ -1,3 +1,6 @@
+# SRMP EOS Fork
+This fork is a modifaction to SRMP to rely on EOS P2P servers. This will use server codes, based off of the SR2MP EOS System I helped with.
+
 # srmp-public
 This is the code for the Slime Rancher MultiPlayer Mod (SRMP) by SatyPardus.
 
