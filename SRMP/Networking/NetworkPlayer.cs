@@ -10,13 +10,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SRMultiplayer.EpicSDK;
 using UnityEngine;
 
 namespace SRMultiplayer.Networking
 {
     public partial class NetworkPlayer : MonoBehaviour
     {
-        public NetConnection Connection { get; internal set; }
         public Guid UUID { get; internal set; }
 
         public byte ID { get; internal set; }
@@ -24,6 +24,8 @@ namespace SRMultiplayer.Networking
         public bool IsLocal { get { return ID == Globals.LocalID; } }
         public List<string> Mods { get; set; }
         public List<DLCPackage.Id> DLCs { get; set; }
+
+        public NetworkPlayerState State;
 
         public bool HasLoaded;
         public RegionRegistry.RegionSetId CurrentRegionSet
@@ -465,6 +467,12 @@ namespace SRMultiplayer.Networking
         public override string ToString()
         {
             return $"{Username} ({ID})";
+        }
+
+        public void Disconnect(string reason)
+        {
+            var epic = Globals.PlayerToEpic[ID];
+            NetworkServer.Instance.CloseConnection(epic);
         }
     }
 }

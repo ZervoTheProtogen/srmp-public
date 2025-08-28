@@ -3,6 +3,7 @@
     public enum PacketType
     {
         Unknown,
+        Authentication,
         PlayerJoined,
         PlayerLeft,
         PlayerPosition,
@@ -114,5 +115,6 @@
         RaceTime,
         RaceTrigger,
         PlayerChat,
+        
     }
 }

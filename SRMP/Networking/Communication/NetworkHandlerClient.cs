@@ -1170,9 +1170,10 @@ namespace SRMultiplayer.Networking
             SRSingleton<SceneContext>.Instance.TimeDirector.FastForwardTo(packet.FastForwardTill);
         }
 
-        private static void OnWorldTime(PacketWorldTime packet)
+        private static void  OnWorldTime(PacketWorldTime packet)
         {
             SRSingleton<SceneContext>.Instance.TimeDirector.worldModel.worldTime = packet.Time;
+            SRMP.Log(packet.Time.ToString());
         }
 
         private static void OnWorldData(PacketWorldData packet)
@@ -2060,6 +2061,8 @@ namespace SRMultiplayer.Networking
             {
                 GameObject.Destroy(player.gameObject);
                 Globals.Players.Remove(packet.ID);
+                Globals.EpicToPlayer.Remove(Globals.PlayerToEpic[packet.ID]);
+                Globals.PlayerToEpic.Remove(packet.ID);
             }
         }
 

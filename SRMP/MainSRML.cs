@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using SRMultiplayer.EpicSDK;
 using UnityEngine;
 
 namespace SRMultiplayer
@@ -71,12 +72,10 @@ namespace SRMultiplayer
 
             m_GameObject = new GameObject("SRMP");
             m_GameObject.AddComponent<SRMP>();
-            m_GameObject.AddComponent<NetworkMasterServer>();
-            m_GameObject.AddComponent<NetworkClient>();
-            m_GameObject.AddComponent<NetworkServer>();
             m_GameObject.AddComponent<MultiplayerUI>();
             m_GameObject.AddComponent<ChatUI>();
             m_GameObject.AddComponent<SRMPConsole>();
+            m_GameObject.AddComponent<EpicApplication>();
 
             //mark all mod objects and do not destroy
             GameObject.DontDestroyOnLoad(m_GameObject);

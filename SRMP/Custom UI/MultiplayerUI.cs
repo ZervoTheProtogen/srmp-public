@@ -4,6 +4,7 @@ using SRMultiplayer;
 using UnityEngine.SceneManagement;
 using System;
 using System.Text.RegularExpressions;
+using SRMultiplayer.EpicSDK;
 using SRMultiplayer.Networking;
 
 public class MultiplayerUI : SRSingleton<MultiplayerUI>
@@ -223,11 +224,6 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
             else
             {
                 bool canHost = true;
-                //check if user can host the session
-                if (!int.TryParse(port, out int numport) || numport < 1000 || numport > 65000)
-                {
-                    canHost = false;
-                }
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("Status: Disconnected", red);
@@ -240,7 +236,7 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
                     {
                         if (GUILayout.Button("Host"))
                         {
-                            NetworkServer.Instance.StartServer(numport);
+                            EpicApplication.Instance.Lobby.CreateLobby();
                             SaveSettings();
                         }
                     }
@@ -331,7 +327,7 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
             GUILayout.Label(player.Username);
             if (GUILayout.Button("Kick"))
             {
-                player.Connection.Disconnect("kicked");
+                player.Disconnect("kicked");
             }
             GUILayout.EndHorizontal();
         }
@@ -357,6 +353,7 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
         }
         GUILayout.EndScrollView();
     }
+
     /// <summary>
     /// Display the connection information of the gui
     /// this section includes user information,
@@ -370,76 +367,25 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
             Globals.Username = "";
             return;
         }
+
         GUILayout.Space(20);
         if (GUILayout.Button("How do I host a game?"))
         {
             help = ConnectHelp.Hosting;
         }
-        GUILayout.Space(20);
-
-        if (SRSingleton<NetworkMasterServer>.Instance.Status == NetworkMasterServer.ConnectionStatus.Connected)
-        {
-            GUILayout.Label("Join with server code:");
-            GUILayout.BeginHorizontal();
-            servercode = GUILayout.TextField(servercode, 5, GUILayout.Width(80));
-            servercode = servercode.Replace(" ", "").ToUpper();
-            if (GUILayout.Button("Join"))
-            {
-                lastCodeUse = 5;
-                SRSingleton<NetworkMasterServer>.Instance.JoinServer(servercode);
-            }
-            GUILayout.EndHorizontal();
-        }
-        else
-        {
-            GUILayout.Label("Server codes currently not available");
-        }
 
         GUILayout.Space(20);
 
-        GUILayout.Label("Join with IP Address:");
+        GUILayout.Label("Join with server code:");
         GUILayout.BeginHorizontal();
-        GUILayout.Label("IP Address", GUILayout.Width(80));
-        ipaddress = GUILayout.TextField(ipaddress);
+        servercode = GUILayout.TextField(servercode, 7, GUILayout.Width(120));
+        servercode = servercode.Replace(" ", "").ToUpper();
+        if (GUILayout.Button("Join"))
+        {
+            lastCodeUse = 5;
+            EpicApplication.Instance.Lobby.JoinLobby(servercode);
+        }
         GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Port", GUILayout.Width(80));
-        port = GUILayout.TextField(port);
-        GUILayout.EndHorizontal();
-        if (string.IsNullOrWhiteSpace(ipaddress))
-        {
-            GUILayout.Label("IPAddress invalid");
-        }
-        else if (!int.TryParse(port, out int numport) || numport < 1000 || numport > 65000)
-        {
-            GUILayout.Label("Invalid port, should be between 1000 and 65000");
-        }
-        else
-        {
-            if (GUILayout.Button("Connect"))
-            {
-                SRSingleton<NetworkClient>.Instance.Connect(ipaddress, numport, Globals.Username);
-                SaveSettings();
-            }
-        }
-
-        GUILayout.Space(20);
-        GUILayout.Label("Games in the same Network:");
-        if (GUILayout.Button("Refresh"))
-        {
-            SRSingleton<NetworkClient>.Instance.SendDiscoverMessage();
-        }
-        if (SRSingleton<NetworkClient>.Instance.LocalGames.Count == 0)
-        {
-            GUILayout.Label("No games found");
-        }
-        foreach (var game in SRSingleton<NetworkClient>.Instance.LocalGames)
-        {
-            if (GUILayout.Button(game.Name))
-            {
-                SRSingleton<NetworkClient>.Instance.Connect(game.IP, game.Port, Globals.Username);
-            }
-        }
     }
 
     /// <summary>
@@ -454,24 +400,15 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
             return;
         }
 
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Port", GUILayout.Width(80));
-        port = GUILayout.TextField(port);
-        GUILayout.EndHorizontal();
 
-        if (!int.TryParse(port, out int numport) || numport < 1000 || numport > 65000)
+        if (GUILayout.Button("Host"))
         {
-            GUILayout.Label("Invalid port");
+            EpicApplication.Instance.Lobby.CreateLobby();
+            SaveSettings();
         }
-        else
-        {
-            if (GUILayout.Button("Host"))
-            {
-                NetworkServer.Instance.StartServer(numport);
-                SaveSettings();
-            }
-        }
+
     }
+
     /// <summary>
     /// Display the Help info part of the gui with instructions for hosting
     /// </summary>
@@ -573,7 +510,6 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
             {
                 Globals.Username = username;
                 SaveSettings();
-                SRSingleton<NetworkMasterServer>.Instance.UpdateName(Globals.Username);
             }
         }
     }

@@ -4,13 +4,16 @@ using SRMultiplayer.Networking;
 using SRMultiplayer.Packets;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Epic.OnlineServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Debug = UnityEngine.Debug;
 
 namespace SRMultiplayer
 {
@@ -77,8 +80,8 @@ namespace SRMultiplayer
         {
             base.OnDestroy();
 
-            NetworkClient.Instance.Disconnect();
-            NetworkServer.Instance.Disconnect();
+            NetworkClient.Instance.Shutdown();
+            NetworkServer.Instance.Shutdown();
         }
 
         /// <summary>
@@ -86,8 +89,8 @@ namespace SRMultiplayer
         /// </summary>
         private void OnApplicationQuit()
         {
-            NetworkClient.Instance.Disconnect();
-            NetworkServer.Instance.Disconnect();
+            NetworkClient.Instance.Shutdown();
+            NetworkServer.Instance.Shutdown();
         }
 
         /// <summary>
@@ -267,5 +270,14 @@ namespace SRMultiplayer
             m_LogWriter.WriteLine(txt);
             m_LogWriter.Flush();
         }
+        /// <summary>
+        /// Logs the StackTrace of the current frame. 
+        /// </summary>
+        // Used mainly for EOS Debugging.
+        public static void LogStack()
+        {
+            Log(new StackTrace().ToString());
+        }
+        
     }
 }

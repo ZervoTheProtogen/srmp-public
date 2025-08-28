@@ -950,7 +950,7 @@ namespace SRMultiplayer.Networking
 
             foreach (var p in Globals.Players.Values.ToList())
             {
-                if (p.Connection != null && p.ID != player.ID && Vector3.Distance(p.transform.position, packet.Position) < 100)
+                if (p.ID != player.ID && Vector3.Distance(p.transform.position, packet.Position) < 100)
                 {
                     packet.Send(p, NetDeliveryMethod.Unreliable);
                 }

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Epic.OnlineServices.P2P;
 using UnityEngine;
 
 namespace SRMultiplayer
@@ -85,18 +86,36 @@ namespace SRMultiplayer
         }
         #endregion
 
+        private static PacketReliability GetEpicReliability(NetDeliveryMethod r)
+        {
+            switch (r)
+            {
+                case NetDeliveryMethod.Unreliable:
+                    return PacketReliability.UnreliableUnordered;
+                case NetDeliveryMethod.ReliableOrdered:
+                case NetDeliveryMethod.ReliableSequenced:
+                    return PacketReliability.ReliableOrdered;
+                case NetDeliveryMethod.ReliableUnordered:
+                    return PacketReliability.ReliableUnordered;
+                case NetDeliveryMethod.UnreliableSequenced:
+                case NetDeliveryMethod.Unknown:
+                default:
+                    return PacketReliability.UnreliableUnordered;
+            }
+        }
+        
         #region Packet Handling Extensions
-        public static void Send(this Packet packet, NetDeliveryMethod method = NetDeliveryMethod.ReliableOrdered, int sequence = 0)
+        public static void Send(this Packet packet, NetDeliveryMethod method = NetDeliveryMethod.Unreliable, int sequence = 0)
         {
             if(!Globals.IsClient)
             {
-                NetworkServer.Instance.SendToAll(packet, method, sequence);
+                NetworkServer.Instance.SendPacketToAll(packet, null, GetEpicReliability(method));
                 return;
             }
-            NetworkClient.Instance.Send(packet, method, sequence);
+            NetworkClient.Instance.SendPacket(packet, GetEpicReliability(method));
         }
 
-        public static void Send(this Packet packet, NetworkPlayer player, NetDeliveryMethod method = NetDeliveryMethod.ReliableOrdered, int sequence = 0)
+        public static void Send(this Packet packet, NetworkPlayer player, NetDeliveryMethod method = NetDeliveryMethod.Unreliable, int sequence = 0)
         {
             if (!Globals.IsServer)
             {
@@ -104,10 +123,10 @@ namespace SRMultiplayer
                 return;
             }
 
-            NetworkServer.Instance.Send(player.Connection, packet, method, sequence);
+            NetworkServer.Instance.SendPacket(Globals.PlayerToEpic[player.ID], packet, GetEpicReliability(method));
         }
 
-        public static void SendToAll(this Packet packet, NetDeliveryMethod method = NetDeliveryMethod.ReliableOrdered, int sequence = 0)
+        public static void SendToAll(this Packet packet, NetDeliveryMethod method = NetDeliveryMethod.Unreliable, int sequence = 0)
         {
             if (!Globals.IsServer)
             {
@@ -115,56 +134,19 @@ namespace SRMultiplayer
                 return;
             }
 
-            List<NetConnection> cons = new List<NetConnection>();
-            foreach (var p in Globals.Players.Values)
-            {
-                if (p.Connection != null)
-                {
-                    cons.Add(p.Connection);
-                }
-            }
-            NetworkServer.Instance.SendTo(packet, cons, method, sequence);
+            NetworkServer.Instance.SendPacketToAll(packet, null, GetEpicReliability(method));
         }
 
-        public static void SendToAllInRegions(this Packet packet, NetworkPlayer player, bool includeSelf, NetDeliveryMethod method = NetDeliveryMethod.ReliableOrdered, int sequence = 0)
+
+        public static void SendToAllExcept(this Packet packet, NetworkPlayer player, NetDeliveryMethod method = NetDeliveryMethod.Unreliable, int sequence = 0)
         {
             if (!Globals.IsServer)
             {
                 SRMP.Log("Trying to send packet as server while not server");
                 return;
             }
-
-            List<NetConnection> cons = new List<NetConnection>();
-            foreach(var netRegion in player.Regions)
-            {
-                foreach(var p in netRegion.Players)
-                {
-                    if(p.ID != player.ID && p.Connection != null && !cons.Contains(p.Connection))
-                    {
-                        cons.Add(p.Connection);
-                    }
-                }
-            }
-            NetworkServer.Instance.SendTo(packet, cons, method, sequence);
-        }
-
-        public static void SendToAllExcept(this Packet packet, NetworkPlayer player, NetDeliveryMethod method = NetDeliveryMethod.ReliableOrdered, int sequence = 0)
-        {
-            if (!Globals.IsServer)
-            {
-                SRMP.Log("Trying to send packet as server while not server");
-                return;
-            }
-
-            List<NetConnection> cons = new List<NetConnection>();
-            foreach (var p in Globals.Players.Values)
-            {
-                if (p.ID != player.ID && p.Connection != null)
-                {
-                    cons.Add(p.Connection);
-                }
-            }
-            NetworkServer.Instance.SendTo(packet, cons, method, sequence);
+            
+            NetworkServer.Instance.SendPacketToAll(packet, Globals.PlayerToEpic[player.ID], GetEpicReliability(method));
         }
 
         #endregion
