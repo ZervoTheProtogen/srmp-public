@@ -6,6 +6,7 @@ using System;
 using System.Text.RegularExpressions;
 using SRMultiplayer.EpicSDK;
 using SRMultiplayer.Networking;
+using SRMultiplayer.Packets;
 
 public class MultiplayerUI : SRSingleton<MultiplayerUI>
 {
@@ -39,7 +40,7 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
     private ConnectHelp help;
     private string errorMessage;
 
-
+    public PacketKickClient kickData;
 
     public enum ConnectError
     {
@@ -279,7 +280,7 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
             }
             else
             {
-                if (error != ConnectError.None)
+                if (kickData != null)
                 {
                     ErrorGUI();
                 }
@@ -327,7 +328,7 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
             GUILayout.Label(player.Username);
             if (GUILayout.Button("Kick"))
             {
-                player.Disconnect("kicked");
+                NetworkServer.Instance.DisconnectKick(player);
             }
             GUILayout.EndHorizontal();
         }
@@ -440,55 +441,54 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
     /// </summary>
     private void ErrorGUI()
     {
-        switch (error)
+        switch (kickData.reason)
         {
-            case ConnectError.InvalidServerCode:
-                {
-                    GUILayout.Label("There is no server with this server code.");
+            case PacketKickClient.Reason.Kicked:
+                GUILayout.Label("You got kicked from the game");
 
-                    if (GUILayout.Button("Okay"))
-                    {
-                        error = ConnectError.None;
-                    }
+                if (GUILayout.Button("Okay"))
+                {
+                    kickData = null;
                 }
                 break;
-            case ConnectError.Kicked:
+            case PacketKickClient.Reason.VersionMismatch:
+                GUILayout.Label("Your version is different from the server version!");
+                GUILayout.Label($"Your Version: {Globals.Version}");
+                GUILayout.Label($"Server Version: {kickData.data}");
+                
+                if (GUILayout.Button("Okay"))
                 {
-                    GUILayout.Label("You got kicked from the game");
-
-                    if (GUILayout.Button("Okay"))
-                    {
-                        error = ConnectError.None;
-                    }
+                    kickData = null;
                 }
                 break;
-            case ConnectError.Message:
+            case PacketKickClient.Reason.ModsMismatch:
+                GUILayout.Label("The server has different mods installed!");
+                GUILayout.Label((string)kickData.data);
+                
+                if (GUILayout.Button("Okay"))
                 {
-                    GUILayout.Label("Connection Error:");
-                    GUILayout.Label(errorMessage);
-
-                    if (GUILayout.Button("Okay"))
-                    {
-                        error = ConnectError.None;
-                    }
+                    kickData = null;
                 }
                 break;
-            case ConnectError.ServerCodeTimeout:
+            case PacketKickClient.Reason.DLCMismatch:
+                GUILayout.Label("The server has different DLCs installed!");
+                GUILayout.Label((string)kickData.data);
+                
+                if (GUILayout.Button("Okay"))
                 {
-                    GUILayout.Label("Connection via server code timed out.");
-                    GUILayout.Label("Server codes do not have a 100% success chance.");
-                    GUILayout.Label("You can try again, but if it keeps failing, you may have to port forward.");
-                    GUILayout.Label("If you can't port forward, we recommend a service like 'Hamachi' or 'Radmin'");
-                    GUILayout.Label("Please note: Hamachi and Radmin degrade the experience by quite a lot. Port forwarding is always better.");
-                    GUILayout.Label("(We can not offer support for port forwarding)");
-
-                    if (GUILayout.Button("Okay"))
-                    {
-                        error = ConnectError.None;
-                    }
+                    kickData = null;
+                }
+                break;
+            case PacketKickClient.Reason.Custom:
+                GUILayout.Label((string)kickData.data);
+                
+                if (GUILayout.Button("Okay"))
+                {
+                    kickData = null;
                 }
                 break;
         }
+        
     }
     /// <summary>
     /// Display the Current user information 
@@ -510,6 +510,10 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
             {
                 Globals.Username = username;
                 SaveSettings();
+                var auth = EpicApplication.Instance.Authentication;
+                if (auth.IsLoggedIn)
+                    auth.Logout();
+                auth.Login(username);
             }
         }
     }

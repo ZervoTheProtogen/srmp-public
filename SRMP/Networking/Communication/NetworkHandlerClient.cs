@@ -34,6 +34,7 @@ namespace SRMultiplayer.Networking
                 case PacketType.PlayerUpgrade: OnPlayerUpgrade(new PacketPlayerUpgrade(im)); break;
                 case PacketType.PlayerUpgradeUnlock: OnPlayerUpgradeUnlock(new PacketPlayerUpgradeUnlock(im)); break;
                 case PacketType.PlayerChat: OnPlayerChat(new PacketPlayerChat(im)); break;
+                case PacketType.KickPlayer: OnPlayerKicked(new PacketKickClient(im)); break;
 
                 // Region
                 case PacketType.RegionOwner: OnRegionOwner(new PacketRegionOwner(im)); break;
@@ -50,6 +51,7 @@ namespace SRMultiplayer.Networking
                 case PacketType.ActorEmotions: OnActorEmotions(new PacketActorEmotions(im)); break;
                 case PacketType.ActorFeral: OnActorFeral(new PacketActorFeral(im)); break;
                 case PacketType.ActorFX: OnActorFX(new PacketActorFX(im)); break;
+                
                 //LandPlots
                 case PacketType.LandPlots: OnLandPlots(new PacketLandplots(im)); break;
                 case PacketType.LandPlotSiloInsert: OnLandPlotSiloInsert(new PacketLandPlotSiloInsert(im)); break;
@@ -65,6 +67,7 @@ namespace SRMultiplayer.Networking
                 case PacketType.LandPlotSiloAmmoAdd: OnLandPlotSiloAmmoAdd(new PacketLandPlotSiloAmmoAdd(im)); break;
                 case PacketType.LandPlotSiloAmmoRemove: OnLandPlotSiloAmmoRemove(new PacketLandPlotSiloAmmoRemove(im)); break;
                 case PacketType.LandPlotSiloAmmoClear: OnLandPlotSiloAmmoClear(new PacketLandPlotSiloAmmoClear(im)); break;
+                
                 //World
                 case PacketType.WorldData: OnWorldData(new PacketWorldData(im)); break;
                 case PacketType.WorldTime: OnWorldTime(new PacketWorldTime(im)); break;
@@ -81,23 +84,29 @@ namespace SRMultiplayer.Networking
                 case PacketType.WorldCredits: OnWorldCredits(new PacketWorldCredits(im)); break;
                 case PacketType.WorldMailSend: OnWorldMailSend(new PacketWorldMailSend(im)); break;
                 case PacketType.WorldMailRead: OnWorldMailRead(new PacketWorldMailRead(im)); break;
+                
                 //FX
                 case PacketType.GlobalFX: OnGlobalFX(new PacketGlobalFX(im)); break;
                 case PacketType.IncinerateFX: OnIncinerateFX(new PacketIncinerateFX(im)); break;
                 case PacketType.PlayAudio: OnPlayAudio(new PacketPlayAudio(im)); break;
+                
                 //AccessDoors
                 case PacketType.AccessDoors: OnAccessDoors(new PacketAccessDoors(im)); break;
                 case PacketType.AccessDoorOpen: OnAccessDoorOpen(new PacketAccessDoorOpen(im)); break;
+                
                 //Gordos
                 case PacketType.Gordos: OnGordos(new PacketGordos(im)); break;
                 case PacketType.GordoEat: OnGordoEat(new PacketGordoEat(im)); break;
+                
                 //PuzzleSlots
                 case PacketType.PuzzleSlots: OnPuzzleSlots(new PacketPuzzleSlots(im)); break;
                 case PacketType.PuzzleSlotFilled: OnPuzzleSlotFilled(new PacketPuzzleSlotFilled(im)); break;
                 case PacketType.PuzzleGateActivate: OnPuzzleGateActivate(new PacketPuzzleGateActivate(im)); break;
+                
                 //Pedia
                 case PacketType.PediaShowPopup: OnPediaShowPopup(new PacketPediaShowPopup(im)); break;
                 case PacketType.PediaUnlock: OnPediaUnlock(new PacketPediaUnlock(im)); break;
+                
                 //gadgets
                 case PacketType.Gadgets: OnGadgets(new PacketGadgets(im)); break;
                 case PacketType.GadgetRemove: OnGadgetRemove(new PacketGadgetRemove(im)); break;
@@ -112,9 +121,11 @@ namespace SRMultiplayer.Networking
                 case PacketType.GadgetSnareAttach: OnGadgetSnareAttach(new PacketGadgetSnareAttach(im)); break;
                 case PacketType.GadgetSnareGordo: OnGadgetSnareGordo(new PacketGadgetSnareGordo(im)); break;
                 case PacketType.GadgetEchoNetTime: OnGadgetEchoNetTime(new PacketGadgetEchoNetTime(im)); break;
+                
                 //Fashion
                 case PacketType.FashionAttach: OnFashionAttach(new PacketFashionAttach(im)); break;
                 case PacketType.FashionDetachAll: OnFashionDetachAll(new PacketFashionDetachAll(im)); break;
+                
                 //Drone
                 case PacketType.DroneAmmoAdd: OnDroneAmmoAdd(new PacketDroneAmmoAdd(im)); break;
                 case PacketType.DroneAmmoClear: OnDroneAmmoClear(new PacketDroneAmmoClear(im)); break;
@@ -125,31 +136,38 @@ namespace SRMultiplayer.Networking
                 case PacketType.DroneStationEnabled: OnDroneStationEnabled(new PacketDroneStationEnabled(im)); break;
                 case PacketType.DronePosition: OnDronePosition(new PacketDronePosition(im)); break;
                 case PacketType.DroneActive: OnDroneActive(new PacketDroneActive(im)); break;
+                
                 //TreasurePod
                 case PacketType.TreasurePods: OnTreasurePods(new PacketTreasurePods(im)); break;
                 case PacketType.TreasurePodOpen: OnTreasurePodOpen(new PacketTreasurePodOpen(im)); break;
+                
                 //Exchanges
                 case PacketType.ExchangeOffers: OnExchangeOffers(new PacketExchangeOffers(im)); break;
                 case PacketType.ExchangeOffer: OnExchangeOffer(new PacketExchangeOffer(im)); break;
                 case PacketType.ExchangeClear: OnExchangeClear(new PacketExchangeClear(im)); break;
                 case PacketType.ExchangePrepareDaily: OnExchangePrepareDaily(new PacketExchangePrepareDaily(im)); break;
                 case PacketType.ExchangeTryAccept: OnExchangeTryAccept(new PacketExchangeTryAccept(im)); break;
+                
                 //Oasis
                 case PacketType.Oasis: OnOasis(new PacketOasis(im)); break;
                 case PacketType.OasisLive: OnOasisLive(new PacketOasisLive(im)); break;
+                
                 //FireColumns
                 case PacketType.FireColumnActivate: OnFireColumnActivate(new PacketFireColumnActivate(im)); break;
                 case PacketType.FireStormMode: OnFireStormMode(new PacketFireStormMode(im)); break;
+                
                 //Others
                 case PacketType.GingerAction: OnGingerAction(new PacketGingerAction(im)); break;
                 case PacketType.KookadobaAction: OnKookadobaAction(new PacketKookadobaAction(im)); break;
                 case PacketType.GingerAttach: OnGingerAttach(new PacketGingerAttach(im)); break;
                 case PacketType.KookadobaAttach: OnKookadobaAttach(new PacketKookadobaAttach(im)); break;
+                
                 // Race
                 case PacketType.RaceActivate: OnRaceActivate(new PacketRaceActivate(im)); break;
                 case PacketType.RaceEnd: OnRaceEnd(new PacketRaceEnd(im)); break;
                 case PacketType.RaceTime: OnRaceTime(new PacketRaceTime(im)); break;
                 case PacketType.RaceTrigger: OnRaceTrigger(new PacketRaceTrigger(im)); break;
+                
                 default:
                     SRMP.Log($"Got unhandled packet: {type} " + Enum.GetName(typeof(PacketType), type));
                     break;
@@ -2074,6 +2092,11 @@ namespace SRMultiplayer.Networking
             player.Username = packet.Username;
 
             Globals.Players.Add(packet.ID, player);
+        }
+        
+        private static void OnPlayerKicked(PacketKickClient packet)
+        {
+            MultiplayerUI.Instance.kickData = packet;
         }
         #endregion
     }

@@ -278,7 +278,7 @@ namespace SRMultiplayer.EpicSDK
             p2PInterface.AcceptConnection(ref acceptConnectionOptions);
         }
 
-        public void CloseConnection(ProductUserId remoteUserId) // made public so that it is easy to kick
+        protected void CloseConnection(ProductUserId remoteUserId)
         {
             var closeConnectionOptions = new CloseConnectionOptions
             {

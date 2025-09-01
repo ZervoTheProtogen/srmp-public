@@ -469,10 +469,5 @@ namespace SRMultiplayer.Networking
             return $"{Username} ({ID})";
         }
 
-        public void Disconnect(string reason)
-        {
-            var epic = Globals.PlayerToEpic[ID];
-            NetworkServer.Instance.CloseConnection(epic);
-        }
     }
 }

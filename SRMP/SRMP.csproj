@@ -1392,6 +1392,7 @@
     <Compile Include="Packets\Others\PacketKookadobaAction.cs" />
     <Compile Include="Packets\Actors\PacketActorFX.cs" />
     <Compile Include="Packets\Others\PacketKookadobaAttach.cs" />
+    <Compile Include="Packets\Players\PacketKickClient.cs" />
     <Compile Include="Packets\Players\PacketPlayerChat.cs" />
     <Compile Include="Packets\Race\PacketRaceActivate.cs" />
     <Compile Include="Packets\Race\PacketRaceEnd.cs" />

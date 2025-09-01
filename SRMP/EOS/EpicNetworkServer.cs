@@ -138,7 +138,7 @@ namespace SRMultiplayer.Networking
                 SendDataInternal(targetUserId, buffer, packetReliability);
             }
 
-            SRMP.Log(om.m_data.Aggregate("{", (current, b) => current + $" {b}") + " }");
+            SRMP.Log($"SEND {packet.GetPacketType()} {{ {BitConverter.ToString(om.m_data)} }}");
         }
 
         public void SendPacketToAll(IPacket packet, ProductUserId except = null, PacketReliability packetReliability = PacketReliability.ReliableOrdered)//, byte channel = 0)
@@ -197,9 +197,11 @@ namespace SRMultiplayer.Networking
                         im = new NetIncomingMessage
                         {
                             m_data = completeData.ToArray(),
-                            LengthBytes = completeData.Count
+                            LengthBytes = completeData.Count,
+                            m_readPosition = 16,
                         };
                         
+                        SRMP.Log($"RECV {packetType} {{ {BitConverter.ToString(im.m_data)} }}");
                     }
                     else
                         return;
@@ -209,9 +211,11 @@ namespace SRMultiplayer.Networking
                         if(packetType != PacketType.Authentication)
                         {
                             SRMP.Log($"{player} sent {packetType} while authenticating!");
-                            CloseConnection(senderUserId);
+                            //CloseConnection(senderUserId); some bugs???
                             return;
                         }
+
+                        im.m_readPosition = 0;
 
                         HandleAuthentication(player, im);
                     }
@@ -264,14 +268,29 @@ namespace SRMultiplayer.Networking
             var username = im.ReadString();
             var guid = im.ReadBytes(16);
             var build = im.ReadInt32();
+            
+            List<string> mods = new List<string>();
+            var modsLen = im.ReadInt32();
+            for (var i = 0; i < modsLen; i++)
+                mods.Add(im.ReadString());
 
+            
             if (build != Globals.Version)
             {
                 SRMP.Log($"Version Mismatch! YOU({Globals.Version}) vs PLAYER({build})");
-                CloseConnection(Globals.PlayerToEpic[pid]);
+                DisconnectVersionMismatch(player);
                 return;
             }
 
+            var modsDiff1 = Globals.Mods.Where(x => !mods.Contains(x));
+            var modsDiff2 = mods.Where(x => !Globals.Mods.Contains(x));
+            if (modsDiff1.Count() != 0 || modsDiff2.Count() != 0)
+            {
+                var modsDiff3 = modsDiff1.Union(modsDiff2);
+                DisconnectModMismatch(player, string.Join(", ", modsDiff3.ToArray()));
+                return;
+            }
+            
             player.UUID = new Guid(guid);
             player.Username = username;
             player.name = $"{username} ({pid})";
@@ -328,6 +347,68 @@ namespace SRMultiplayer.Networking
         public override void OnShutdown()
         {
             status = ServerStatus.Stopped;
+        }
+
+        public void DisconnectKick(NetworkPlayer player)
+        {
+            new PacketKickClient()
+            {
+                reason = PacketKickClient.Reason.Kicked
+            }.Send(player, NetDeliveryMethod.ReliableOrdered);
+            
+            CloseConnection(Globals.PlayerToEpic[player.ID]);
+        }
+        /// <summary>
+        /// Disconnect player due to a mismatch between versions.
+        /// </summary>
+        public void DisconnectVersionMismatch(NetworkPlayer player)
+        {
+            new PacketKickClient()
+            {
+                reason = PacketKickClient.Reason.VersionMismatch,
+                data = Globals.Version
+            }.Send(player, NetDeliveryMethod.ReliableOrdered);
+            
+            CloseConnection(Globals.PlayerToEpic[player.ID]);
+        }
+        /// <summary>
+        /// Disconnect player with a custom message.
+        /// </summary>
+        public void DisconnectCustom(NetworkPlayer player, string msg)
+        {
+            new PacketKickClient()
+            {
+                reason = PacketKickClient.Reason.Custom,
+                data = msg
+            }.Send(player, NetDeliveryMethod.ReliableOrdered);
+            
+            CloseConnection(Globals.PlayerToEpic[player.ID]);
+        }
+        /// <summary>
+        /// Disconnect player due to different dlcs being installed
+        /// </summary>
+        public void DisconnectDLCMismatch(NetworkPlayer player, string list)
+        {
+            new PacketKickClient()
+            {
+                reason = PacketKickClient.Reason.DLCMismatch,
+                data = list
+            }.Send(player, NetDeliveryMethod.ReliableOrdered);
+            
+            CloseConnection(Globals.PlayerToEpic[player.ID]);
+        }
+        /// <summary>
+        /// Disconnect player due to different mods being installed
+        /// </summary>
+        public void DisconnectModMismatch(NetworkPlayer player, string list)
+        {
+            new PacketKickClient()
+            {
+                reason = PacketKickClient.Reason.ModsMismatch,
+                data = list
+            }.Send(player, NetDeliveryMethod.ReliableOrdered);
+            
+            CloseConnection(Globals.PlayerToEpic[player.ID]);
         }
     }
 }

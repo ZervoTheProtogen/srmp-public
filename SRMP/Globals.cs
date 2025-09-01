@@ -81,13 +81,21 @@ namespace SRMultiplayer
                 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
                 foreach (var assembly in assemblies)
                 {
-                    if (!assembly.GetName().Name.Contains("Unity") && !assembly.GetName().Name.Contains("InControl") && !assembly.GetName().Name.Contains("DOTween") &&
+                    if (
+                        // Main
+                        !assembly.GetName().Name.Contains("Unity") && !assembly.GetName().Name.Contains("InControl") && !assembly.GetName().Name.Contains("DOTween") &&
                         !assembly.GetName().Name.Contains("mscorlib") && !assembly.GetName().Name.Contains("System") && !assembly.GetName().Name.Contains("Assembly-CSharp") &&
                         !assembly.GetName().Name.Contains("Logger") && !assembly.GetName().Name.Contains("Mono.") && !assembly.GetName().Name.Contains("Harmony") &&
                         !assembly.GetName().Name.Equals("SRML") && !assembly.GetName().Name.Equals("SRML.Editor") && !assembly.GetName().Name.Equals("Newtonsoft.Json") &&
                         !assembly.GetName().Name.Equals("INIFileParser") && !assembly.GetName().Name.Equals("SRMultiplayer") && !assembly.GetName().Name.Contains("Microsoft.") &&
-                        !assembly.GetName().Name.Equals("SRMP") && !assembly.GetName().Name.Equals("XGamingRuntime") && !assembly.GetName().Name.Contains("MonoMod.Utils.") 
-                        && !Globals.UserData.IgnoredMods.Contains(assembly.GetName().Name))
+                        !assembly.GetName().Name.Equals("SRMP") && !assembly.GetName().Name.Equals("XGamingRuntime") && !assembly.GetName().Name.Contains("MonoMod")  &&
+                        
+                        // Unity Explorer (Debugging)
+                        !assembly.GetName().Name.Equals("UniverseLib.Mono") && !assembly.GetName().Name.Contains("eval-")  && !assembly.GetName().Name.Equals("Tomlet") &&
+                        !assembly.GetName().Name.Equals("mcs")
+                        
+                        // Ignored Mods
+                        && !UserData.IgnoredMods.Contains(assembly.GetName().Name))
                     {
                         mods.Add(assembly.GetName().Name);
                     }

@@ -66,6 +66,8 @@ namespace SRMultiplayer.Networking
 
                 SendDataInternal(serverUserId, buffer, packetReliability);
             }
+            
+            SRMP.Log($"SEND {packet.GetPacketType()} {{ {BitConverter.ToString(om.m_data)} }}");
         }
 
         public override void OnMessageReceived(ProductUserId senderUserId, byte channel, ref NetIncomingMessage im)
@@ -107,16 +109,18 @@ namespace SRMultiplayer.Networking
                 im = new NetIncomingMessage
                 {
                     m_data = completeData.ToArray(),
-                    LengthBytes = completeData.Count
+                    LengthBytes = completeData.Count,
+                    m_readPosition = 16
                 };
                 
-                SRMP.Log(im.m_data.Aggregate("{", (current, b) => current + $" {b}") + " }");
+                SRMP.Log($"RECV {packetType} {{ {BitConverter.ToString(im.m_data)} }}");
             }
             else
                 return;
 
             if (packetType == PacketType.Authentication)
             {
+                im.m_readPosition = 0;
                 
                 Globals.LocalID = im.ReadByte();
 
@@ -145,6 +149,7 @@ namespace SRMultiplayer.Networking
                 var gameMode = (PlayerState.GameMode)im.ReadByte();
                 Globals.CurrentGameName = im.ReadString();
                 SRMP.Log("Auth Complete");
+                Status = NetworkClientStatus.Connected;
                 SRSingleton<GameContext>.Instance.AutoSaveDirector.LoadNewGame("SRMultiplayerGame", Identifiable.Id.GOLD_SLIME, gameMode, () =>
                 {
                     CloseConnection(serverUserId);
@@ -171,9 +176,16 @@ namespace SRMultiplayer.Networking
             om.Write((ushort)PacketType.Authentication);
             om.Write((byte)0);
             om.Write((byte)1);
+            
             om.Write(Globals.Username);
             om.Write(Globals.UserData.UUID.ToByteArray());
             om.Write(Globals.Version);
+
+            var mods = Globals.Mods;
+            
+            om.Write(mods.Count);
+            foreach (var mod in mods)
+                om.Write(mod);
 
             SendDataInternal(serverUserId, om.Data);
         }
