@@ -15,6 +15,7 @@ namespace SRMultiplayer.Networking
     {
         public static void HandlePacket(PacketType type, NetIncomingMessage im)
         {
+            Globals.HandlePacket = true;
             if (!Globals.PacketSize.ContainsKey(type))
                 Globals.PacketSize.Add(type, 0);
             Globals.PacketSize[type] += im.LengthBytes;
@@ -172,6 +173,8 @@ namespace SRMultiplayer.Networking
                     SRMP.Log($"Got unhandled packet: {type} " + Enum.GetName(typeof(PacketType), type));
                     break;
             }
+            
+            Globals.HandlePacket = false;
         }
 
         #region Race
