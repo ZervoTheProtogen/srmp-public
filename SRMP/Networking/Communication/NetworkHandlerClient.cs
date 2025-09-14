@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using HarmonyLib;
+using SRMultiplayer.Packets.ModCompat;
 using UnityEngine;
 
 namespace SRMultiplayer.Networking
@@ -168,6 +170,9 @@ namespace SRMultiplayer.Networking
                 case PacketType.RaceEnd: OnRaceEnd(new PacketRaceEnd(im)); break;
                 case PacketType.RaceTime: OnRaceTime(new PacketRaceTime(im)); break;
                 case PacketType.RaceTrigger: OnRaceTrigger(new PacketRaceTrigger(im)); break;
+                
+                // Mod Compatibility
+                case PacketType.SetNickname: OnSetNickname(new PacketSetNickname(im)); break;
                 
                 default:
                     SRMP.Log($"Got unhandled packet: {type} " + Enum.GetName(typeof(PacketType), type));
@@ -959,6 +964,7 @@ namespace SRMultiplayer.Networking
 
         private static void OnGordos(PacketGordos packet)
         {
+            var nicknamesEnabled = Globals.NicknamesModInstalled;
             foreach (var gordoData in packet.Gordos)
             {
                 if (SRSingleton<SceneContext>.Instance.GameModel.AllGordos().TryGetValue(gordoData.ID, out GordoModel model))
@@ -968,6 +974,10 @@ namespace SRMultiplayer.Networking
 
                     model.Init();
                     model.NotifyParticipants();
+                    
+                    if (nicknamesEnabled)
+                        model.gameObj.GetComponent(AccessTools.TypeByName("Nicknames.GordoNickname"))
+                            .SetField("Name", gordoData.NicknameModValue);
                 }
             }
         }
@@ -1789,6 +1799,7 @@ namespace SRMultiplayer.Networking
 
         private static void OnActors(PacketActors packet)
         {
+            var nicknamesEnabled = Globals.NicknamesModInstalled;
             foreach (var actorData in packet.Actors)
             {
                 if (!Globals.Actors.ContainsKey(actorData.ID))
@@ -1847,7 +1858,16 @@ namespace SRMultiplayer.Networking
                                 slimeEat.slimeModel.NotifyParticipants(actorObj);
                             }
                         }
+                        
+                        
+                        
 
+                        if (nicknamesEnabled)
+                            netActor.GetComponent(AccessTools.TypeByName("Nicknames.SlimeNickname"))
+                                .SetField("Name", actorData.NicknameModValue);
+                
+                        
+                        
                         Globals.Actors.Add(netActor.ID, netActor);
                     }
                     catch (Exception ex)
@@ -2100,6 +2120,28 @@ namespace SRMultiplayer.Networking
         private static void OnPlayerKicked(PacketKickClient packet)
         {
             MultiplayerUI.Instance.kickData = packet;
+        }
+        #endregion
+
+        #region Mod Compatibility
+        private static void OnSetNickname(PacketSetNickname packet)
+        {
+            if (packet.type)
+            {
+                var gordo = Globals.Gordos[packet.gordoId];
+
+                var nicknameGordo = gordo.GetComponent(AccessTools.TypeByName("Nicknames.GordoNickname"));
+                
+                nicknameGordo.SetField("Name", packet.nickname);
+            }
+            else
+            {
+                var slime = Globals.Actors[packet.actorId];
+
+                var nicknameSlime = slime.GetComponent(AccessTools.TypeByName("Nicknames.SlimeNickname"));
+                
+                nicknameSlime.SetField("Name", packet.nickname);
+            }
         }
         #endregion
     }

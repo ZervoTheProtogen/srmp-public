@@ -103,5 +103,14 @@ namespace SRMultiplayer
                 return mods;
             }
         }
+
+        public static void TryAdd<TK, TV>(this Dictionary<TK, TV> dict, TK key, TV value)
+        {
+            if (dict.ContainsKey(key))
+                return;
+            dict.Add(key, value);
+        }
+
+        public static bool NicknamesModInstalled => Mods.Contains("Nicknames");
     }
 }

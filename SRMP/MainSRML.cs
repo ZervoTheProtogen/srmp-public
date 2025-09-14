@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using SRMultiplayer.EpicSDK;
+using SRMultiplayer.Patches.ModCompat;
 using UnityEngine;
 
 namespace SRMultiplayer
@@ -67,9 +68,6 @@ namespace SRMultiplayer
                 SRMP.Log("Loaded userdata with UUID " + Globals.UserData.UUID);
             }
 
-            //create the mods main game objects and start connecting everything
-            string[] args = System.Environment.GetCommandLineArgs();
-
             m_GameObject = new GameObject("SRMP");
             m_GameObject.AddComponent<SRMP>();
             m_GameObject.AddComponent<MultiplayerUI>();
@@ -87,7 +85,11 @@ namespace SRMultiplayer
             Application.runInBackground = true;
 
             //initialize connect to the harmony patcher
-            HarmonyPatcher.GetInstance().PatchAll(Assembly.GetExecutingAssembly());
+            HarmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
+            
+            // Initialize ModCompat Patches
+            if (SRModLoader.IsModPresent("nicknames")) // Nicknames
+                SRMP.CompatPatch(HarmonyInstance, "Nicknames.NicknameCommand", "Execute", typeof(NicknameCommand_Execute));
         }
 
 

@@ -25,6 +25,8 @@ namespace SRMultiplayer.Packets
             public ProduceModel ProduceModel;
             public AnimalModel AnimalModel;
             public PlortModel PlortModel;
+
+            public string NicknameModValue;
         }
         public List<ActorData> Actors { get; set; }
 
@@ -84,6 +86,10 @@ namespace SRMultiplayer.Packets
                 {
                     om.Write(actorData.PlortModel.destroyTime);
                 }
+                
+                om.Write(actorData.NicknameModValue != null);
+                if (actorData.NicknameModValue != null)
+                    om.Write(actorData.NicknameModValue);
             }
         }
 
@@ -143,7 +149,12 @@ namespace SRMultiplayer.Packets
                     actorData.PlortModel = new PlortModel(0, Identifiable.Id.NONE, MonomiPark.SlimeRancher.Regions.RegionRegistry.RegionSetId.HOME, new GameObject());
                     actorData.PlortModel.destroyTime = im.ReadDouble();
                 }
-
+                
+                if (im.ReadBoolean())
+                {
+                    actorData.NicknameModValue = im.ReadString();
+                }
+                
                 Actors.Add(actorData);
             }
         }

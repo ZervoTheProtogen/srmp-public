@@ -1383,6 +1383,7 @@
     <Compile Include="Packets\Gadgets\PacketGadgetSnareAttach.cs" />
     <Compile Include="Packets\Gadgets\PacketGadgetSnareGordo.cs" />
     <Compile Include="Packets\Gordos\PacketGordoEat.cs" />
+    <Compile Include="Packets\ModCompat\PacketSetNickname.cs" />
     <Compile Include="Packets\Oasis\PacketOasis.cs" />
     <Compile Include="Packets\Oasis\PacketOasisLive.cs" />
     <Compile Include="Packets\FireColumn\PacketFireColumnActivate.cs" />
@@ -1454,6 +1455,7 @@
     <Compile Include="Packets\Regions\PacketRegionChange.cs" />
     <Compile Include="Packets\Regions\PacketRegionOwner.cs" />
     <Compile Include="Packets\World\PacketWorldData.cs" />
+    <Compile Include="Patches\ModCompat\Patch_NicknameCommand.cs" />
     <Compile Include="Patches\Patch_AccessDoor.cs" />
     <Compile Include="Patches\Patch_Ammo.cs" />
     <Compile Include="Patches\Patch_AttachFashions.cs" />

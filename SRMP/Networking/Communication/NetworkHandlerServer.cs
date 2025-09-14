@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HarmonyLib;
+using SRMultiplayer.Packets.ModCompat;
 using UnityEngine;
 
 namespace SRMultiplayer.Networking
@@ -132,6 +134,8 @@ namespace SRMultiplayer.Networking
                 case PacketType.RaceEnd: OnRaceEnd(new PacketRaceEnd(im), player); break;
                 case PacketType.RaceTime: OnRaceTime(new PacketRaceTime(im), player); break;
                 case PacketType.RaceTrigger: OnRaceTrigger(new PacketRaceTrigger(im), player); break;
+                // Mod Compatibility
+                case PacketType.SetNickname: OnSetNickname(new PacketSetNickname(im), player); break;
                 default:
                     SRMP.Log($"Got unhandled packet from {player}:  {type}" + Enum.GetName(typeof(PacketType), type));
                     break;
@@ -1692,7 +1696,9 @@ namespace SRMultiplayer.Networking
         }
 
         private static void OnPlayerLoaded(PacketPlayerLoaded packet, NetworkPlayer player)
-        {
+        {      
+            var nicknamesEnabled = Globals.NicknamesModInstalled;
+
             new PacketWorldData()
             {
                 Seed = SRSingleton<SceneContext>.Instance.EconomyDirector.worldModel.econSeed,
@@ -1725,7 +1731,12 @@ namespace SRMultiplayer.Networking
 
             new PacketGordos()
             {
-                Gordos = Globals.Gordos.Values.Where(g => g.Gordo.gordoModel != null).Select(g => new PacketGordos.GordoData() { ID = g.Gordo.id, Model = g.Gordo.gordoModel }).ToList()
+                Gordos = Globals.Gordos.Values.Where(g => g.Gordo.gordoModel != null).Select(g => new PacketGordos.GordoData()
+                {
+                    ID = g.Gordo.id, 
+                    Model = g.Gordo.gordoModel,
+                    NicknameModValue = nicknamesEnabled ? (string)g.GetComponent(AccessTools.TypeByName("Nicknames.GordoNickname")).GetField("Name") : null,
+                }).ToList()
             }.Send(player, NetDeliveryMethod.ReliableOrdered);
 
             new PacketAccessDoors()
@@ -1777,6 +1788,30 @@ namespace SRMultiplayer.Networking
 
             packet.ID = player.ID;
             packet.SendToAll();
+        }
+        #endregion
+        
+        #region Mod Compatibility
+        private static void OnSetNickname(PacketSetNickname packet, NetworkPlayer player)
+        {
+            if (packet.type)
+            {
+                var gordo = Globals.Gordos[packet.gordoId];
+
+                var nicknameGordo = gordo.GetComponent(AccessTools.TypeByName("Nicknames.GordoNickname"));
+                
+                nicknameGordo.SetField("Name", packet.nickname);
+            }
+            else
+            {
+                var slime = Globals.Actors[packet.actorId];
+
+                var nicknameSlime = slime.GetComponent(AccessTools.TypeByName("Nicknames.SlimeNickname"));
+                
+                nicknameSlime.SetField("Name", packet.nickname);
+            }
+            
+            packet.SendToAllExcept(player);
         }
         #endregion
     }

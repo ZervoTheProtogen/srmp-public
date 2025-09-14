@@ -120,5 +120,8 @@
         
         // Mod support - VR
         VRPositions = 114,
+        
+        // Mod support - Nicknames
+        SetNickname = 115,
     }
 }

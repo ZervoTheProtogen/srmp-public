@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HarmonyLib;
 using Lidgren.Network;
 using UnityEngine;
 
@@ -37,6 +38,7 @@ namespace SRMultiplayer.Networking
                 netActor.KnownPlayers.Add(player);
             }
 
+            var nicknamesEnabled = Globals.NicknamesModInstalled;
             new PacketActors()
             {
                 Actors = netActors.Select(a => new PacketActors.ActorData()
@@ -50,7 +52,9 @@ namespace SRMultiplayer.Networking
                     AnimalModel = a.Reproduce != null ? a.Reproduce.model : null,
                     PlortModel = a.DestroyPlortAfterTime != null ? a.DestroyPlortAfterTime.plortModel : null,
                     SlimeModel = a.SlimeEat != null ? a.SlimeEat.slimeModel : null,
-                    ProduceModel = a.ResourceCycle != null ? a.ResourceCycle.model : null
+                    ProduceModel = a.ResourceCycle != null ? a.ResourceCycle.model : null,
+                    NicknameModValue = nicknamesEnabled ? (string)a.GetComponent(AccessTools.TypeByName("Nicknames.SlimeNickname")).GetField("Name") : null,
+                    
                 }).ToList()
             }.Send(player);
             //SRMP.Log($"{player} loaded into {name} with {netActors.Count} unknown network actors ({Region.members.GetCount()} actors total)");

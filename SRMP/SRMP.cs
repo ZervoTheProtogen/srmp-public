@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Epic.OnlineServices;
+using HarmonyLib;
 using SRMultiplayer.EpicSDK;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -208,12 +209,12 @@ namespace SRMultiplayer
 
             foreach (var audio in Resources.FindObjectsOfTypeAll<SECTR_AudioCue>())
             {
-                Globals.Audios.Add(audio.name, audio);
+                Globals.Audios.TryAdd(audio.name, audio);
             }
 
             var splashOnTrigger = GameObject.FindObjectOfType<SplashOnTrigger>();
-            Globals.FXPrefabs.Add(splashOnTrigger.playerSplashFX.name, splashOnTrigger.playerSplashFX);
-            Globals.FXPrefabs.Add(splashOnTrigger.splashFX.name, splashOnTrigger.splashFX);
+            Globals.FXPrefabs.TryAdd(splashOnTrigger.playerSplashFX.name, splashOnTrigger.playerSplashFX);
+            Globals.FXPrefabs.TryAdd(splashOnTrigger.splashFX.name, splashOnTrigger.splashFX);
 
 
             if (Globals.IsClient)
@@ -276,6 +277,27 @@ namespace SRMultiplayer
         {
             Log(new StackTrace().ToString());
         }
-        
+
+        public static void CompatPatch(Harmony harmony, string className, string methodName, Type patchType)
+        {
+            Type ogType = AccessTools.TypeByName(className);
+            MethodInfo ogMethod = AccessTools.Method(ogType, methodName);
+
+
+            HarmonyMethod prefix = null;
+            MethodInfo prefixInfo = patchType.GetMethod("Prefix");
+            
+            if (prefixInfo != null)
+                prefix = new HarmonyMethod(prefixInfo);
+            
+            
+            HarmonyMethod postfix = null;
+            MethodInfo postfixInfo = patchType.GetMethod("Postfix");
+            
+            if (postfixInfo != null)
+                postfix = new HarmonyMethod(postfixInfo);
+            
+            harmony.Patch(ogMethod, prefix, postfix);
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SRMultiplayer.EpicSDK;
 using UnityEngine;
 
 namespace SRMultiplayer.Patches
@@ -18,9 +19,11 @@ namespace SRMultiplayer.Patches
             if (!Globals.IsMultiplayer) return;
 
             //only handle the client if the client is the one disconnecting
-            NetworkClient.Instance?.Shutdown();
+            if (Globals.IsClient)
+                EpicApplication.Instance.Lobby.LeaveLobby();
             //if server ahndle the shutdown
-            NetworkServer.Instance?.Shutdown();
+            if (Globals.IsServer)
+                EpicApplication.Instance.Lobby.DestroyLobby();
         }
     }
 

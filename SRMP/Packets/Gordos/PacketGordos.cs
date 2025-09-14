@@ -15,6 +15,7 @@ namespace SRMultiplayer.Packets
         {
             public string ID;
             public GordoModel Model;
+            public string NicknameModValue;
         }
         public List<GordoData> Gordos { get; set; }
 
@@ -34,6 +35,12 @@ namespace SRMultiplayer.Packets
                 foreach(var fashion in gordo.Model.fashions)
                 {
                     om.Write((ushort)fashion);
+                }
+
+                om.Write(gordo.NicknameModValue != null);
+                if (gordo.NicknameModValue != null)
+                {
+                    om.Write(gordo.NicknameModValue);
                 }
             }
         }
@@ -58,6 +65,11 @@ namespace SRMultiplayer.Packets
                 for(int j = 0; j < fashionCount; j++)
                 {
                     gordoData.Model.fashions.Add((Identifiable.Id)im.ReadUInt16());
+                }
+
+                if (im.ReadBoolean())
+                {
+                    gordoData.NicknameModValue = im.ReadString();
                 }
                 Gordos.Add(gordoData);
             }
