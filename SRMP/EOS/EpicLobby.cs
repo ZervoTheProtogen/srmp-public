@@ -256,6 +256,9 @@ namespace SRMultiplayer.EpicSDK
 
         public void LeaveLobby()
         {
+            if (!IsInLobby)
+                return;
+            
             var leaveLobbyOptions = new LeaveLobbyOptions()
             {
                 LocalUserId = SRSingleton<EpicApplication>.Instance.Authentication.ProductUserId,
@@ -266,7 +269,7 @@ namespace SRMultiplayer.EpicSDK
 
         private void OnLeaveLobby(ref LeaveLobbyCallbackInfo data)
         {
-            SRMultiplayer.SRMP.Log($"Result -> {data.ResultCode}");
+            SRMP.Log($"Result -> {data.ResultCode}");
             if(data.ResultCode != Result.Success)
             {
                 return;
@@ -296,6 +299,9 @@ namespace SRMultiplayer.EpicSDK
 
         public void DestroyLobby()
         {
+            if (!IsLobbyOwner || !IsInLobby)
+                return;
+            
             var destroyLobbyOptions = new DestroyLobbyOptions()
             {
                 LobbyId = LobbyId,
@@ -306,7 +312,7 @@ namespace SRMultiplayer.EpicSDK
 
         private void OnDestroyLobby(ref DestroyLobbyCallbackInfo data)
         {
-            SRMultiplayer.SRMP.Log($"Result -> {data.ResultCode}");
+            SRMP.Log($"Result -> {data.ResultCode}");
             if (data.ResultCode != Result.Success)
             {
                 return;

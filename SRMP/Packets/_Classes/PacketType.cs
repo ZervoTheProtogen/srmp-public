@@ -2,6 +2,7 @@
 {
     public enum PacketType : ushort
     {
+        // Base SRMP
         Unknown = 0,
         Authentication = 1,
         PlayerJoined = 2,
@@ -116,5 +117,8 @@
         RaceTrigger = 111,
         PlayerChat = 112,
         KickPlayer = 113,
+        
+        // Mod support - VR
+        VRPositions = 114,
     }
 }

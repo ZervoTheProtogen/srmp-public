@@ -16,8 +16,9 @@ namespace SRMultiplayer.Patches
         static void Prefix(Vacuumable __instance)
         {
             if (!Globals.IsMultiplayer) return;
-
-            var netActor = __instance.GetComponentInParent<NetworkActor>();
+            
+            var netActor = __instance.GetComponent<NetworkActor>();
+            SRMP.Log($"Vacuumable.capture - NetActor is null:{netActor == null}, NetActor is local:{netActor.IsLocal}");
             if (netActor != null && !netActor.IsLocal)
             {
                 netActor.TakeOwnership();

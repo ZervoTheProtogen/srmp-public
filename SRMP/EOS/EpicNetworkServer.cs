@@ -19,7 +19,7 @@ namespace SRMultiplayer.Networking
     public class NetworkServer : EpicP2P
     {
         public static NetworkServer Instance { get; private set; }
-        private byte nextPlayerId = 0;
+        private byte nextPlayerId = 2;
         private Queue<byte> freeIds = new Queue<byte>();
 
         public ServerStatus status;
@@ -44,12 +44,6 @@ namespace SRMultiplayer.Networking
 
             // Original SRMP Stuff
             status = ServerStatus.Running;
-
-            NetPeerConfiguration discoverConfig = new NetPeerConfiguration("discover");
-            discoverConfig.EnableMessageType(NetIncomingMessageType.DiscoveryRequest);
-            discoverConfig.MaximumConnections = 0;
-            discoverConfig.Port = 6996;
-
 
             Globals.DisableAchievements = true;
             Globals.PartyID = Guid.NewGuid();
@@ -138,7 +132,7 @@ namespace SRMultiplayer.Networking
                 SendDataInternal(targetUserId, buffer, packetReliability);
             }
 
-            SRMP.Log($"SEND {packet.GetPacketType()} {{ {BitConverter.ToString(om.m_data)} }}");
+            //SRMP.Log($"SEND {packet.GetPacketType()} {{ {BitConverter.ToString(om.m_data)} }}");
         }
 
         public void SendPacketToAll(IPacket packet, ProductUserId except = null, PacketReliability packetReliability = PacketReliability.ReliableOrdered)//, byte channel = 0)
@@ -158,9 +152,11 @@ namespace SRMultiplayer.Networking
             if (Globals.EpicToPlayer.TryGetValue(senderUserId, out var playerID))
             {
                 var player = Globals.Players[playerID];
+                //SRMP.Log("Received Packet Fragment");
                 try
                 {
                     PacketType packetType = (PacketType)im.ReadUInt16();
+                    //SRMP.Log($"Packet Frag Type: {packetType}");
                     byte fragmentIndex = im.ReadByte();
                     byte totalFragments = im.ReadByte();
 
@@ -191,7 +187,7 @@ namespace SRMultiplayer.Networking
                             debugLogIndex++;
                             completeData.AddRange(frag);
                         }
-                        
+                        //SRMP.Log("Packet Fragments combined");
 
                         incompletePackets.Remove(packetType);
                         im = new NetIncomingMessage
@@ -201,7 +197,7 @@ namespace SRMultiplayer.Networking
                             m_readPosition = 16,
                         };
                         
-                        SRMP.Log($"RECV {packetType} {{ {BitConverter.ToString(im.m_data)} }}");
+                        //SRMP.Log($"RECV {packetType} {{ {BitConverter.ToString(im.m_data)} }}");
                     }
                     else
                         return;
@@ -259,6 +255,8 @@ namespace SRMultiplayer.Networking
             Globals.Players.Add(nextId, player);
 
             player.State = NetworkPlayerState.Authenticating;
+            
+            
         }
         
         private void HandleAuthentication(NetworkPlayer player, NetIncomingMessage im)
@@ -291,6 +289,12 @@ namespace SRMultiplayer.Networking
                 return;
             }
             
+            new PacketPlayerJoined()
+            {
+                ID = pid,
+                Username = username
+            }.SendToAllExcept(player, NetDeliveryMethod.ReliableOrdered);
+            
             player.UUID = new Guid(guid);
             player.Username = username;
             player.name = $"{username} ({pid})";
@@ -315,6 +319,8 @@ namespace SRMultiplayer.Networking
             SRMP.Log("Sent Auth Packet");
             
             SendDataInternal(Globals.PlayerToEpic[pid], hail.Data);
+
+            player.State = NetworkPlayerState.Connected;
         }
 
         public override void OnDisconnected(ProductUserId remoteUserId, ConnectionClosedReason reason)

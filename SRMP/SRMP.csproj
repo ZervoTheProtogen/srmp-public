@@ -1492,7 +1492,7 @@
     <Compile Include="Patches\Patch_HydroTurret.cs" />
     <Compile Include="Patches\Patch_Identifiable.cs" />
     <Compile Include="Patches\Patch_Incinerate.cs" />
-    <Compile Include="Patches\Patch_IntorUI.cs" />
+    <Compile Include="Patches\Patch_IntroUI.cs" />
     <Compile Include="Patches\Patch_KookadobaPatchNode.cs" />
     <Compile Include="Patches\Patch_LandPlot.cs" />
     <Compile Include="Patches\Patch_LandPlotLocation.cs" />

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using Lidgren.Network;
 using UnityEngine;
 
 namespace SRMultiplayer.Networking
@@ -175,7 +176,7 @@ namespace SRMultiplayer.Networking
             {
                 ID = ID,
                 Owner = Globals.LocalID
-            }.Send();
+            }.Send(NetDeliveryMethod.ReliableOrdered);
         }
 
         public void DropOwnership()

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lidgren.Network;
 using UnityEngine;
 
 namespace SRMultiplayer.Networking
@@ -79,7 +80,8 @@ namespace SRMultiplayer.Networking
             {
                 ID = ID,
                 Owner = Globals.LocalID
-            }.Send();
+            }.Send(NetDeliveryMethod.ReliableOrdered);
+            
         }
 
         public void DropOwnership()
@@ -95,6 +97,9 @@ namespace SRMultiplayer.Networking
 
         public void SetOwnership(byte id)
         {
+            if (Owner == id)
+                return;
+            
             Owner = id;
             //SRMP.Log($"Owner for {name} now {(Owner == 0 ? "None" : Globals.Players[Owner].ToString())}");
 

@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Epic.OnlineServices;
+using SRMultiplayer.EpicSDK;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
@@ -39,7 +40,7 @@ namespace SRMultiplayer
             var myLoadedAssetBundle = AssetBundle.LoadFromMemory(Utils.ExtractResource("SRMultiplayer.srmultiplayer.dat"));
             if (myLoadedAssetBundle == null)
             {
-                SRMP.Log("Failed to load AssetBundle!");
+                Log("Failed to load AssetBundle!");
                 return;
             }
             //load up the Player moment animator for the Beatrix model
@@ -60,16 +61,10 @@ namespace SRMultiplayer
             //if Error or Exception hand the error of to the Mods log/console to display
             if(type == LogType.Error || type == LogType.Exception)
             {
-                SRMP.Log(condition);
+                Log(condition);
                 if (!string.IsNullOrEmpty(stackTrace))
-                    SRMP.Log(stackTrace);
+                    Log(stackTrace);
             }
-        }
-
-        private void Start()
-        {
-            //var menuObj = Instantiate(Globals.MainMultiplayerMenuPrefab, null, false);
-            //menuObj.AddComponent<NetworkClientUI>();
         }
 
         /// <summary>
@@ -89,8 +84,10 @@ namespace SRMultiplayer
         /// </summary>
         private void OnApplicationQuit()
         {
-            NetworkClient.Instance.Shutdown();
-            NetworkServer.Instance.Shutdown();
+            if (Globals.IsClient)
+                EpicApplication.Instance.Lobby.LeaveLobby();
+            if (Globals.IsServer)
+                EpicApplication.Instance.Lobby.DestroyLobby();
         }
 
         /// <summary>
@@ -120,7 +117,7 @@ namespace SRMultiplayer
                 //        if(actor.IsLocal && !actor.gameObject.activeInHierarchy)
                 //        {
                 //            actor.DropOwnership();
-                //            //SRMP.Log($"Dropping actor {actor.name} ({actor.ID}) as it's unloaded");
+                //            //Log($"Dropping actor {actor.name} ({actor.ID}) as it's unloaded");
                 //        }
                 //    }
                 //}
@@ -232,6 +229,7 @@ namespace SRMultiplayer
                     }
                 }
                 new PacketPlayerLoaded().Send();
+                Log("\"PacketPlayerLoaded\" Has been sent to server successfully!");
             }
             else
             {
@@ -244,7 +242,7 @@ namespace SRMultiplayer
             Globals.GameLoaded = true;
 
             stopwatch.Stop();
-            SRMP.Log($"Loaded the game in {stopwatch.ElapsedMilliseconds}ms");
+            Log($"Loaded the game in {stopwatch.ElapsedMilliseconds}ms");
         }
 
         private static FileStream m_LogFileStream;

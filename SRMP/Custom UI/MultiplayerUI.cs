@@ -317,7 +317,14 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
         GUILayout.Label("You are the server");
         GUILayout.Space(20);
 
+        GUILayout.BeginHorizontal();
         GUILayout.Label("Server Code: " + Globals.ServerCode);
+        if (GUILayout.Button("Copy"))
+        {
+            GUIUtility.systemCopyBuffer = Globals.ServerCode;
+        }
+        GUILayout.EndHorizontal();
+        
         GUILayout.Label("Players");
         playersScroll = GUILayout.BeginScrollView(playersScroll, GUI.skin.box);
         foreach (var player in Globals.Players.Values)

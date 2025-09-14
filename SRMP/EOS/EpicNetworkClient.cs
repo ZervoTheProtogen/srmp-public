@@ -67,57 +67,66 @@ namespace SRMultiplayer.Networking
                 SendDataInternal(serverUserId, buffer, packetReliability);
             }
             
-            SRMP.Log($"SEND {packet.GetPacketType()} {{ {BitConverter.ToString(om.m_data)} }}");
+            //SRMP.Log($"SEND {packet.GetPacketType()} {{ {BitConverter.ToString(om.m_data)} }}");
         }
 
         public override void OnMessageReceived(ProductUserId senderUserId, byte channel, ref NetIncomingMessage im)
         {
-            PacketType packetType = (PacketType)im.ReadUInt16();
-            byte fragmentIndex = im.ReadByte();
-            byte totalFragments = im.ReadByte();
-
-            byte[] payload = im.Data.Skip(4).ToArray();
-
-            if (!incompletePackets.TryGetValue(packetType, out var msg))
+            PacketType packetType = PacketType.Unknown;
+            try
             {
-                msg = new IncompletePacket
+                packetType = (PacketType)im.ReadUInt16();
+                byte fragmentIndex = im.ReadByte();
+                byte totalFragments = im.ReadByte();
+
+                byte[] payload = im.Data.Skip(4).ToArray();
+
+                if (!incompletePackets.TryGetValue(packetType, out var msg))
                 {
-                    fragments = new byte[totalFragments][],
-                    fragTotal = totalFragments,
-                    fragIndex = 0,
-                };
-                incompletePackets[packetType] = msg;
-            }
-            if (msg.fragments[fragmentIndex] == null)
-            {
-                msg.fragments[fragmentIndex] = payload;
-                msg.fragIndex++;
-            }
-
-            if (msg.fragIndex >= msg.fragTotal)
-            {
-                List<byte> completeData = new List<byte>();
-                int debugLogIndex = 0;
-                foreach (var frag in msg.fragments)
-                {            
-                    debugLogIndex++;
-                    completeData.AddRange(frag);
+                    msg = new IncompletePacket
+                    {
+                        fragments = new byte[totalFragments][],
+                        fragTotal = totalFragments,
+                        fragIndex = 0,
+                    };
+                    incompletePackets[packetType] = msg;
                 }
+                if (msg.fragments[fragmentIndex] == null)
+                {
+                    msg.fragments[fragmentIndex] = payload;
+                    msg.fragIndex++;
+                }
+
+                if (msg.fragIndex >= msg.fragTotal)
+                {
+                    List<byte> completeData = new List<byte>();
+                    int debugLogIndex = 0;
+                    foreach (var frag in msg.fragments)
+                    {            
+                        debugLogIndex++;
+                        completeData.AddRange(frag);
+                    }
                         
 
-                incompletePackets.Remove(packetType);
-                im = new NetIncomingMessage
-                {
-                    m_data = completeData.ToArray(),
-                    LengthBytes = completeData.Count,
-                    m_readPosition = 16
-                };
+                    incompletePackets.Remove(packetType);
+                    im = new NetIncomingMessage
+                    {
+                        m_data = completeData.ToArray(),
+                        LengthBytes = completeData.Count,
+                        m_readPosition = 16
+                    };
                 
-                SRMP.Log($"RECV {packetType} {{ {BitConverter.ToString(im.m_data)} }}");
-            }
-            else
-                return;
+                    //SRMP.Log($"RECV {packetType} {{ {BitConverter.ToString(im.m_data)} }}");
+                }
+                else
+                    return;
 
+            }
+            catch (Exception e)
+            {
+                SRMP.Log($"Exception in receiving packets from server:\n{e}");
+                return;
+            }
             if (packetType == PacketType.Authentication)
             {
                 im.m_readPosition = 0;
