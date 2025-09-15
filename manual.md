@@ -21,6 +21,8 @@ Click a link to jump to that section of the document.
 
 [Compatibility](#compatibility)
 
+> [VR](#vr)
+
 [Download the mod](#download-the-mod)
 
 > [Which version to use?](#which-version-to-use)
@@ -135,6 +137,10 @@ If you want an explanation to a specific entry in the table, select the operatin
         🔴 Incompatible: Good luck getting Microsoft Store working on Mac. Even if you did, this version doesn't work with the mod.
     </details>
 </details>
+
+### VR
+
+Starting in SRMP **1589**, VR has been implemented!
 
 ### Playing with other mods
 
