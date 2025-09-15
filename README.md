@@ -27,6 +27,7 @@ FIXED:
 - Exchange sometimes skips rewards if multiple players put items in at the same time
 - Exchange chest disappears without rewards
 - Falling through world
+
 IN PROGRESS: N/A
 
 Known Bugs:
