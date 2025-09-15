@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using SRMultiplayer.Networking;
 using System.IO;
 using System.Reflection;
+using SRMultiplayer.EpicSDK;
 using UnityCoreMod;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace SRMultiplayer
 {   // <summary>
     /// Handles mod being loaded from directly without the mod loader
     /// </summary>
-    public class MainSaty : IUnityMod
+    public class MainStandalone : IUnityMod
     {
         private static GameObject m_GameObject;
 
@@ -54,12 +55,10 @@ namespace SRMultiplayer
 
             m_GameObject = new GameObject("SRMP");
             m_GameObject.AddComponent<SRMP>();
-            m_GameObject.AddComponent<NetworkMasterServer>();
-            m_GameObject.AddComponent<NetworkClient>();
-            m_GameObject.AddComponent<NetworkServer>();
             m_GameObject.AddComponent<MultiplayerUI>();
             m_GameObject.AddComponent<ChatUI>();
             m_GameObject.AddComponent<SRMPConsole>();
+            m_GameObject.AddComponent<EpicApplication>();
 
             //mark all mod objects and do not destroy
             GameObject.DontDestroyOnLoad(m_GameObject);

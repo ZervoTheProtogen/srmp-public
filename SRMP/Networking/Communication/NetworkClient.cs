@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 
 namespace SRMultiplayer.Networking
 {
-    public class NetworkClient : SRSingleton<NetworkClient>
+    public class NetworkClient2 : SRSingleton<NetworkClient2>
     {
         private NetClient m_Client;
 

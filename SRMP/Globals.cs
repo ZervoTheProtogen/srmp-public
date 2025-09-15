@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Epic.OnlineServices;
+using SRMultiplayer.Enums;
+using SRMultiplayer.EpicSDK;
 using UnityEngine;
 
 namespace SRMultiplayer
@@ -19,13 +22,24 @@ namespace SRMultiplayer
         public static RuntimeAnimatorController BeatrixController;
         public static Dictionary<byte, NetworkPlayer> Players = new Dictionary<byte, NetworkPlayer>();
         public static string Username;
-        public static string ServerCode;
+
+        public static string ServerCode
+        {
+            get
+            {
+                var lobby = EpicApplication.Instance.Lobby;
+                if (lobby == null)
+                    return "";
+                return lobby.LobbyId;
+            }
+        }
+        
         public static byte LocalID;
         public static NetworkPlayer LocalPlayer;
         public static bool HandlePacket;
         public static Guid PartyID;
-        public static bool IsClient { get { return NetworkClient.Instance.Status == NetworkClient.ConnectionStatus.Connected; } }
-        public static bool IsServer { get { return NetworkServer.Instance.Status == NetworkServer.ServerStatus.Running; } }
+        public static bool IsClient { get { return NetworkClient.Instance?.Status == NetworkClientStatus.Connected; } }
+        public static bool IsServer { get { return NetworkServer.Instance?.status == NetworkServer.ServerStatus.Running; } }
         public static bool IsMultiplayer { get { return IsClient || IsServer; } }
         public static bool GameLoaded;
         public static bool ClientLoaded;
@@ -52,6 +66,8 @@ namespace SRMultiplayer
         public static Dictionary<int, NetworkRaceTrigger> RaceTriggers = new Dictionary<int, NetworkRaceTrigger>();
         public static List<string> LemonTrees = new List<string>();
         public static Dictionary<PacketType, long> PacketSize = new Dictionary<PacketType, long>();
+        public static Dictionary<ProductUserId, byte> EpicToPlayer = new Dictionary<ProductUserId, byte>();
+        public static Dictionary<byte, ProductUserId> PlayerToEpic = new Dictionary<byte, ProductUserId>();
 
         /// <summary>
         /// get list of current installed mods
@@ -65,13 +81,21 @@ namespace SRMultiplayer
                 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
                 foreach (var assembly in assemblies)
                 {
-                    if (!assembly.GetName().Name.Contains("Unity") && !assembly.GetName().Name.Contains("InControl") && !assembly.GetName().Name.Contains("DOTween") &&
+                    if (
+                        // Main
+                        !assembly.GetName().Name.Contains("Unity") && !assembly.GetName().Name.Contains("InControl") && !assembly.GetName().Name.Contains("DOTween") &&
                         !assembly.GetName().Name.Contains("mscorlib") && !assembly.GetName().Name.Contains("System") && !assembly.GetName().Name.Contains("Assembly-CSharp") &&
                         !assembly.GetName().Name.Contains("Logger") && !assembly.GetName().Name.Contains("Mono.") && !assembly.GetName().Name.Contains("Harmony") &&
                         !assembly.GetName().Name.Equals("SRML") && !assembly.GetName().Name.Equals("SRML.Editor") && !assembly.GetName().Name.Equals("Newtonsoft.Json") &&
                         !assembly.GetName().Name.Equals("INIFileParser") && !assembly.GetName().Name.Equals("SRMultiplayer") && !assembly.GetName().Name.Contains("Microsoft.") &&
-                        !assembly.GetName().Name.Equals("SRMP") && !assembly.GetName().Name.Equals("XGamingRuntime") && !assembly.GetName().Name.Contains("MonoMod.Utils.") 
-                        && !Globals.UserData.IgnoredMods.Contains(assembly.GetName().Name))
+                        !assembly.GetName().Name.Equals("SRMP") && !assembly.GetName().Name.Equals("XGamingRuntime") && !assembly.GetName().Name.Contains("MonoMod")  &&
+                        
+                        // Unity Explorer (Debugging)
+                        !assembly.GetName().Name.Equals("UniverseLib.Mono") && !assembly.GetName().Name.Contains("eval-")  && !assembly.GetName().Name.Equals("Tomlet") &&
+                        !assembly.GetName().Name.Equals("mcs")
+                        
+                        // Ignored Mods
+                        && !UserData.IgnoredMods.Contains(assembly.GetName().Name))
                     {
                         mods.Add(assembly.GetName().Name);
                     }
@@ -79,5 +103,14 @@ namespace SRMultiplayer
                 return mods;
             }
         }
+
+        public static void TryAdd<TK, TV>(this Dictionary<TK, TV> dict, TK key, TV value)
+        {
+            if (dict.ContainsKey(key))
+                return;
+            dict.Add(key, value);
+        }
+
+        public static bool NicknamesModInstalled => Mods.Contains("Nicknames");
     }
 }

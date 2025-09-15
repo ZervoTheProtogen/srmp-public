@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HarmonyLib;
+using Lidgren.Network;
 using UnityEngine;
 
 namespace SRMultiplayer.Networking
@@ -26,33 +28,38 @@ namespace SRMultiplayer.Networking
             {
                 SRSingleton<GameContext>.Instance.StartCoroutine(FastForwarder.OnFastForward());
             }
+
             Players.Add(player);
             player.Regions.Add(this);
-            if (player.Connection != null)
+            var netActors = Region.members.Data.Select(m => m?.GetComponent<NetworkActor>())
+                .Where(a => a != null && !a.KnownPlayers.Contains(player)).ToList();
+            foreach (var netActor in netActors)
             {
-                var netActors = Region.members.Data.Select(m => m?.GetComponent<NetworkActor>()).Where(a => a != null && !a.KnownPlayers.Contains(player)).ToList();
-                foreach (var netActor in netActors)
-                {
-                    netActor.KnownPlayers.Add(player);
-                }
-                new PacketActors()
-                {
-                    Actors = netActors.Select(a => new PacketActors.ActorData()
-                    {
-                        ID = a.ID,
-                        Ident = a.Ident,
-                        RegionSet = a.RegionSet,
-                        Owner = a.Owner,
-                        Position = a.transform.position,
-                        Rotation = a.transform.rotation,
-                        AnimalModel = a.Reproduce != null ? a.Reproduce.model : null,
-                        PlortModel = a.DestroyPlortAfterTime != null ? a.DestroyPlortAfterTime.plortModel : null,
-                        SlimeModel = a.SlimeEat != null ? a.SlimeEat.slimeModel : null,
-                        ProduceModel = a.ResourceCycle != null ? a.ResourceCycle.model : null
-                    }).ToList()
-                }.Send(player);
-                //SRMP.Log($"{player} loaded into {name} with {netActors.Count} unknown network actors ({Region.members.GetCount()} actors total)");
+                netActor.KnownPlayers.Add(player);
             }
+
+            var nicknamesEnabled = Globals.NicknamesModInstalled;
+            new PacketActors()
+            {
+                Actors = netActors.Select(a => new PacketActors.ActorData()
+                {
+                    ID = a.ID,
+                    Ident = a.Ident,
+                    RegionSet = a.RegionSet,
+                    Owner = a.Owner,
+                    Position = a.transform.position,
+                    Rotation = a.transform.rotation,
+                    AnimalModel = a.Reproduce != null ? a.Reproduce.model : null,
+                    PlortModel = a.DestroyPlortAfterTime != null ? a.DestroyPlortAfterTime.plortModel : null,
+                    SlimeModel = a.SlimeEat != null ? a.SlimeEat.slimeModel : null,
+                    ProduceModel = a.ResourceCycle != null ? a.ResourceCycle.model : null,
+#if SRML
+                    NicknameModValue = nicknamesEnabled ? (string)a.GetComponent(AccessTools.TypeByName("Nicknames.SlimeNickname")).GetField("Name") : null,
+#endif            
+                }).ToList()
+            }.Send(player);
+            //SRMP.Log($"{player} loaded into {name} with {netActors.Count} unknown network actors ({Region.members.GetCount()} actors total)");
+
         }
 
         public void RemovePlayer(NetworkPlayer player)
@@ -78,7 +85,8 @@ namespace SRMultiplayer.Networking
             {
                 ID = ID,
                 Owner = Globals.LocalID
-            }.Send();
+            }.Send(NetDeliveryMethod.ReliableOrdered);
+            
         }
 
         public void DropOwnership()
@@ -94,6 +102,9 @@ namespace SRMultiplayer.Networking
 
         public void SetOwnership(byte id)
         {
+            if (Owner == id)
+                return;
+            
             Owner = id;
             //SRMP.Log($"Owner for {name} now {(Owner == 0 ? "None" : Globals.Players[Owner].ToString())}");
 

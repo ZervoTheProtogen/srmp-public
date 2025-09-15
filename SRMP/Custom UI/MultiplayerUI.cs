@@ -4,7 +4,9 @@ using SRMultiplayer;
 using UnityEngine.SceneManagement;
 using System;
 using System.Text.RegularExpressions;
+using SRMultiplayer.EpicSDK;
 using SRMultiplayer.Networking;
+using SRMultiplayer.Packets;
 
 public class MultiplayerUI : SRSingleton<MultiplayerUI>
 {
@@ -38,7 +40,7 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
     private ConnectHelp help;
     private string errorMessage;
 
-
+    public PacketKickClient kickData;
 
     public enum ConnectError
     {
@@ -223,11 +225,6 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
             else
             {
                 bool canHost = true;
-                //check if user can host the session
-                if (!int.TryParse(port, out int numport) || numport < 1000 || numport > 65000)
-                {
-                    canHost = false;
-                }
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("Status: Disconnected", red);
@@ -240,7 +237,7 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
                     {
                         if (GUILayout.Button("Host"))
                         {
-                            NetworkServer.Instance.StartServer(numport);
+                            EpicApplication.Instance.Lobby.CreateLobby();
                             SaveSettings();
                         }
                     }
@@ -283,7 +280,7 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
             }
             else
             {
-                if (error != ConnectError.None)
+                if (kickData != null)
                 {
                     ErrorGUI();
                 }
@@ -320,7 +317,14 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
         GUILayout.Label("You are the server");
         GUILayout.Space(20);
 
+        GUILayout.BeginHorizontal();
         GUILayout.Label("Server Code: " + Globals.ServerCode);
+        if (GUILayout.Button("Copy"))
+        {
+            GUIUtility.systemCopyBuffer = Globals.ServerCode;
+        }
+        GUILayout.EndHorizontal();
+        
         GUILayout.Label("Players");
         playersScroll = GUILayout.BeginScrollView(playersScroll, GUI.skin.box);
         foreach (var player in Globals.Players.Values)
@@ -331,7 +335,7 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
             GUILayout.Label(player.Username);
             if (GUILayout.Button("Kick"))
             {
-                player.Connection.Disconnect("kicked");
+                NetworkServer.Instance.DisconnectKick(player);
             }
             GUILayout.EndHorizontal();
         }
@@ -357,6 +361,7 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
         }
         GUILayout.EndScrollView();
     }
+
     /// <summary>
     /// Display the connection information of the gui
     /// this section includes user information,
@@ -370,76 +375,25 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
             Globals.Username = "";
             return;
         }
+
         GUILayout.Space(20);
         if (GUILayout.Button("How do I host a game?"))
         {
             help = ConnectHelp.Hosting;
         }
-        GUILayout.Space(20);
-
-        if (SRSingleton<NetworkMasterServer>.Instance.Status == NetworkMasterServer.ConnectionStatus.Connected)
-        {
-            GUILayout.Label("Join with server code:");
-            GUILayout.BeginHorizontal();
-            servercode = GUILayout.TextField(servercode, 5, GUILayout.Width(80));
-            servercode = servercode.Replace(" ", "").ToUpper();
-            if (GUILayout.Button("Join"))
-            {
-                lastCodeUse = 5;
-                SRSingleton<NetworkMasterServer>.Instance.JoinServer(servercode);
-            }
-            GUILayout.EndHorizontal();
-        }
-        else
-        {
-            GUILayout.Label("Server codes currently not available");
-        }
 
         GUILayout.Space(20);
 
-        GUILayout.Label("Join with IP Address:");
+        GUILayout.Label("Join with server code:");
         GUILayout.BeginHorizontal();
-        GUILayout.Label("IP Address", GUILayout.Width(80));
-        ipaddress = GUILayout.TextField(ipaddress);
+        servercode = GUILayout.TextField(servercode, 7, GUILayout.Width(120));
+        servercode = servercode.Replace(" ", "").ToUpper();
+        if (GUILayout.Button("Join"))
+        {
+            lastCodeUse = 5;
+            EpicApplication.Instance.Lobby.JoinLobby(servercode);
+        }
         GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Port", GUILayout.Width(80));
-        port = GUILayout.TextField(port);
-        GUILayout.EndHorizontal();
-        if (string.IsNullOrWhiteSpace(ipaddress))
-        {
-            GUILayout.Label("IPAddress invalid");
-        }
-        else if (!int.TryParse(port, out int numport) || numport < 1000 || numport > 65000)
-        {
-            GUILayout.Label("Invalid port, should be between 1000 and 65000");
-        }
-        else
-        {
-            if (GUILayout.Button("Connect"))
-            {
-                SRSingleton<NetworkClient>.Instance.Connect(ipaddress, numport, Globals.Username);
-                SaveSettings();
-            }
-        }
-
-        GUILayout.Space(20);
-        GUILayout.Label("Games in the same Network:");
-        if (GUILayout.Button("Refresh"))
-        {
-            SRSingleton<NetworkClient>.Instance.SendDiscoverMessage();
-        }
-        if (SRSingleton<NetworkClient>.Instance.LocalGames.Count == 0)
-        {
-            GUILayout.Label("No games found");
-        }
-        foreach (var game in SRSingleton<NetworkClient>.Instance.LocalGames)
-        {
-            if (GUILayout.Button(game.Name))
-            {
-                SRSingleton<NetworkClient>.Instance.Connect(game.IP, game.Port, Globals.Username);
-            }
-        }
     }
 
     /// <summary>
@@ -454,24 +408,15 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
             return;
         }
 
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Port", GUILayout.Width(80));
-        port = GUILayout.TextField(port);
-        GUILayout.EndHorizontal();
 
-        if (!int.TryParse(port, out int numport) || numport < 1000 || numport > 65000)
+        if (GUILayout.Button("Host"))
         {
-            GUILayout.Label("Invalid port");
+            EpicApplication.Instance.Lobby.CreateLobby();
+            SaveSettings();
         }
-        else
-        {
-            if (GUILayout.Button("Host"))
-            {
-                NetworkServer.Instance.StartServer(numport);
-                SaveSettings();
-            }
-        }
+
     }
+
     /// <summary>
     /// Display the Help info part of the gui with instructions for hosting
     /// </summary>
@@ -503,55 +448,54 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
     /// </summary>
     private void ErrorGUI()
     {
-        switch (error)
+        switch (kickData.reason)
         {
-            case ConnectError.InvalidServerCode:
-                {
-                    GUILayout.Label("There is no server with this server code.");
+            case PacketKickClient.Reason.Kicked:
+                GUILayout.Label("You got kicked from the game");
 
-                    if (GUILayout.Button("Okay"))
-                    {
-                        error = ConnectError.None;
-                    }
+                if (GUILayout.Button("Okay"))
+                {
+                    kickData = null;
                 }
                 break;
-            case ConnectError.Kicked:
+            case PacketKickClient.Reason.VersionMismatch:
+                GUILayout.Label("Your version is different from the server version!");
+                GUILayout.Label($"Your Version: {Globals.Version}");
+                GUILayout.Label($"Server Version: {kickData.data}");
+                
+                if (GUILayout.Button("Okay"))
                 {
-                    GUILayout.Label("You got kicked from the game");
-
-                    if (GUILayout.Button("Okay"))
-                    {
-                        error = ConnectError.None;
-                    }
+                    kickData = null;
                 }
                 break;
-            case ConnectError.Message:
+            case PacketKickClient.Reason.ModsMismatch:
+                GUILayout.Label("The server has different mods installed!");
+                GUILayout.Label((string)kickData.data);
+                
+                if (GUILayout.Button("Okay"))
                 {
-                    GUILayout.Label("Connection Error:");
-                    GUILayout.Label(errorMessage);
-
-                    if (GUILayout.Button("Okay"))
-                    {
-                        error = ConnectError.None;
-                    }
+                    kickData = null;
                 }
                 break;
-            case ConnectError.ServerCodeTimeout:
+            case PacketKickClient.Reason.DLCMismatch:
+                GUILayout.Label("The server has different DLCs installed!");
+                GUILayout.Label((string)kickData.data);
+                
+                if (GUILayout.Button("Okay"))
                 {
-                    GUILayout.Label("Connection via server code timed out.");
-                    GUILayout.Label("Server codes do not have a 100% success chance.");
-                    GUILayout.Label("You can try again, but if it keeps failing, you may have to port forward.");
-                    GUILayout.Label("If you can't port forward, we recommend a service like 'Hamachi' or 'Radmin'");
-                    GUILayout.Label("Please note: Hamachi and Radmin degrade the experience by quite a lot. Port forwarding is always better.");
-                    GUILayout.Label("(We can not offer support for port forwarding)");
-
-                    if (GUILayout.Button("Okay"))
-                    {
-                        error = ConnectError.None;
-                    }
+                    kickData = null;
+                }
+                break;
+            case PacketKickClient.Reason.Custom:
+                GUILayout.Label((string)kickData.data);
+                
+                if (GUILayout.Button("Okay"))
+                {
+                    kickData = null;
                 }
                 break;
         }
+        
     }
     /// <summary>
     /// Display the Current user information 
@@ -573,7 +517,10 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
             {
                 Globals.Username = username;
                 SaveSettings();
-                SRSingleton<NetworkMasterServer>.Instance.UpdateName(Globals.Username);
+                var auth = EpicApplication.Instance.Authentication;
+                if (auth.IsLoggedIn)
+                    auth.Logout();
+                auth.Login(username);
             }
         }
     }

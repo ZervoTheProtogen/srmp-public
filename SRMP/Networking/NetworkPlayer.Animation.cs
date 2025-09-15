@@ -313,16 +313,5 @@ namespace SRMultiplayer.Networking
             }
         }
 
-        NetOutgoingMessage CreateMessage()
-        {
-            if (Globals.IsClient) return NetworkClient.Instance.CreateMessage();
-            else return NetworkServer.Instance.CreateMessage();
-        }
-
-        void Send(NetOutgoingMessage om)
-        {
-            if (Globals.IsClient) NetworkClient.Instance.Send(om, NetDeliveryMethod.ReliableOrdered, 0);
-            else NetworkServer.Instance.SendToAll(om);
-        }
     }
 }

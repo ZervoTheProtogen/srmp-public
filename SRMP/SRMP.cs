@@ -4,13 +4,18 @@ using SRMultiplayer.Networking;
 using SRMultiplayer.Packets;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Epic.OnlineServices;
+using HarmonyLib;
+using SRMultiplayer.EpicSDK;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Debug = UnityEngine.Debug;
 
 namespace SRMultiplayer
 {
@@ -36,7 +41,7 @@ namespace SRMultiplayer
             var myLoadedAssetBundle = AssetBundle.LoadFromMemory(Utils.ExtractResource("SRMultiplayer.srmultiplayer.dat"));
             if (myLoadedAssetBundle == null)
             {
-                SRMP.Log("Failed to load AssetBundle!");
+                Log("Failed to load AssetBundle!");
                 return;
             }
             //load up the Player moment animator for the Beatrix model
@@ -57,16 +62,10 @@ namespace SRMultiplayer
             //if Error or Exception hand the error of to the Mods log/console to display
             if(type == LogType.Error || type == LogType.Exception)
             {
-                SRMP.Log(condition);
+                Log(condition);
                 if (!string.IsNullOrEmpty(stackTrace))
-                    SRMP.Log(stackTrace);
+                    Log(stackTrace);
             }
-        }
-
-        private void Start()
-        {
-            //var menuObj = Instantiate(Globals.MainMultiplayerMenuPrefab, null, false);
-            //menuObj.AddComponent<NetworkClientUI>();
         }
 
         /// <summary>
@@ -77,8 +76,8 @@ namespace SRMultiplayer
         {
             base.OnDestroy();
 
-            NetworkClient.Instance.Disconnect();
-            NetworkServer.Instance.Disconnect();
+            NetworkClient.Instance.Shutdown();
+            NetworkServer.Instance.Shutdown();
         }
 
         /// <summary>
@@ -86,8 +85,10 @@ namespace SRMultiplayer
         /// </summary>
         private void OnApplicationQuit()
         {
-            NetworkClient.Instance.Disconnect();
-            NetworkServer.Instance.Disconnect();
+            if (Globals.IsClient)
+                EpicApplication.Instance.Lobby.LeaveLobby();
+            if (Globals.IsServer)
+                EpicApplication.Instance.Lobby.DestroyLobby();
         }
 
         /// <summary>
@@ -117,7 +118,7 @@ namespace SRMultiplayer
                 //        if(actor.IsLocal && !actor.gameObject.activeInHierarchy)
                 //        {
                 //            actor.DropOwnership();
-                //            //SRMP.Log($"Dropping actor {actor.name} ({actor.ID}) as it's unloaded");
+                //            //Log($"Dropping actor {actor.name} ({actor.ID}) as it's unloaded");
                 //        }
                 //    }
                 //}
@@ -208,12 +209,12 @@ namespace SRMultiplayer
 
             foreach (var audio in Resources.FindObjectsOfTypeAll<SECTR_AudioCue>())
             {
-                Globals.Audios.Add(audio.name, audio);
+                Globals.Audios.TryAdd(audio.name, audio);
             }
 
             var splashOnTrigger = GameObject.FindObjectOfType<SplashOnTrigger>();
-            Globals.FXPrefabs.Add(splashOnTrigger.playerSplashFX.name, splashOnTrigger.playerSplashFX);
-            Globals.FXPrefabs.Add(splashOnTrigger.splashFX.name, splashOnTrigger.splashFX);
+            Globals.FXPrefabs.TryAdd(splashOnTrigger.playerSplashFX.name, splashOnTrigger.playerSplashFX);
+            Globals.FXPrefabs.TryAdd(splashOnTrigger.splashFX.name, splashOnTrigger.splashFX);
 
 
             if (Globals.IsClient)
@@ -229,6 +230,7 @@ namespace SRMultiplayer
                     }
                 }
                 new PacketPlayerLoaded().Send();
+                Log("\"PacketPlayerLoaded\" Has been sent to server successfully!");
             }
             else
             {
@@ -241,7 +243,7 @@ namespace SRMultiplayer
             Globals.GameLoaded = true;
 
             stopwatch.Stop();
-            SRMP.Log($"Loaded the game in {stopwatch.ElapsedMilliseconds}ms");
+            Log($"Loaded the game in {stopwatch.ElapsedMilliseconds}ms");
         }
 
         private static FileStream m_LogFileStream;
@@ -266,6 +268,36 @@ namespace SRMultiplayer
             Debug.Log("[SRMP]" + txt);
             m_LogWriter.WriteLine(txt);
             m_LogWriter.Flush();
+        }
+        /// <summary>
+        /// Logs the StackTrace of the current frame. 
+        /// </summary>
+        // Used mainly for EOS Debugging.
+        public static void LogStack()
+        {
+            Log(new StackTrace().ToString());
+        }
+
+        public static void CompatPatch(Harmony harmony, string className, string methodName, Type patchType)
+        {
+            Type ogType = AccessTools.TypeByName(className);
+            MethodInfo ogMethod = AccessTools.Method(ogType, methodName);
+
+
+            HarmonyMethod prefix = null;
+            MethodInfo prefixInfo = patchType.GetMethod("Prefix");
+            
+            if (prefixInfo != null)
+                prefix = new HarmonyMethod(prefixInfo);
+            
+            
+            HarmonyMethod postfix = null;
+            MethodInfo postfixInfo = patchType.GetMethod("Postfix");
+            
+            if (postfixInfo != null)
+                postfix = new HarmonyMethod(postfixInfo);
+            
+            harmony.Patch(ogMethod, prefix, postfix);
         }
     }
 }
