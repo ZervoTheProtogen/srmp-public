@@ -123,5 +123,8 @@
         
         // Mod support - Nicknames
         SetNickname = 115,
+        
+        // Mod support - HolySlimes
+        SpiritSlimeMode = 116,
     }
 }

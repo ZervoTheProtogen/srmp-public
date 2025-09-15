@@ -7,7 +7,12 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using HarmonyLib;
 using Lidgren.Network;
+#if SRML
+using SRML;
+#endif
+using SRMultiplayer.Networking.ModCompat;
 using UnityEngine;
 
 namespace SRMultiplayer.Networking
@@ -39,6 +44,11 @@ namespace SRMultiplayer.Networking
         public ResourceCycle ResourceCycle;
         public DestroyPlortAfterTime DestroyPlortAfterTime;
 
+#if SRML
+        // Mod Compatibility
+        public NetworkSpiritSlime SpiritModdedBehavior;
+#endif
+        
         private void Awake()
         {
             m_Rigidbody = GetComponentInChildren<Rigidbody>();
@@ -51,6 +61,15 @@ namespace SRMultiplayer.Networking
             m_PreviousEmotions.Add(SlimeEmotions.Emotion.AGITATION, 0);
             m_PreviousEmotions.Add(SlimeEmotions.Emotion.FEAR, 0);
             m_PreviousEmotions.Add(SlimeEmotions.Emotion.HUNGER, 0);
+
+            #if SRML
+            if (SRModLoader.IsModPresent("holyslimes") &&
+                TryGetComponent(AccessTools.TypeByName("HolySlimes.Behaviors.SpiritHealOrDrain"), out var spirit))
+            {
+                SpiritModdedBehavior = gameObject.AddComponent<NetworkSpiritSlime>();
+                SpiritModdedBehavior.HealOrDrainComponent = spirit;
+            }
+            #endif
         }
 
         private void OnEnable()
@@ -112,6 +131,13 @@ namespace SRMultiplayer.Networking
                             Hunger = m_PreviousEmotions[SlimeEmotions.Emotion.HUNGER]
                         }.Send();
                     }
+
+#if SRML
+                    if (SpiritModdedBehavior != null)
+                    {
+                        // SpiritModdedBehavior.UpdatePacket();
+                    }
+#endif
                 }
             }
             else

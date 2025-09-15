@@ -107,6 +107,9 @@
       <HintPath>.\Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityCoreMod">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Slime Rancher\SlimeRancher_Data\Managed\UnityCoreMod.dll</HintPath>
+    </Reference>
     <Reference Include="UnityCoreMod, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\UnityCoreMod.dll</HintPath>
@@ -1313,6 +1316,7 @@
     <Compile Include="Networking\Communication\NetworkHandlerClient.cs" />
     <Compile Include="Networking\Communication\NetworkHandlerServer.cs" />
     <Compile Include="Networking\Communication\NetworkServer.cs" />
+    <Compile Include="Networking\ModCompat\NetworkSpiritSlime.cs" />
     <Compile Include="Networking\NetworkAccessDoor.cs" />
     <Compile Include="Networking\NetworkActor.cs" />
     <Compile Include="Networking\NetworkAmmo.cs" />
@@ -1384,6 +1388,7 @@
     <Compile Include="Packets\Gadgets\PacketGadgetSnareGordo.cs" />
     <Compile Include="Packets\Gordos\PacketGordoEat.cs" />
     <Compile Include="Packets\ModCompat\PacketSetNickname.cs" />
+    <Compile Include="Packets\ModCompat\PacketSpiritMode.cs" />
     <Compile Include="Packets\Oasis\PacketOasis.cs" />
     <Compile Include="Packets\Oasis\PacketOasisLive.cs" />
     <Compile Include="Packets\FireColumn\PacketFireColumnActivate.cs" />

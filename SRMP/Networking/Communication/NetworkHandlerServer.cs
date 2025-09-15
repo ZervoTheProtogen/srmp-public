@@ -134,8 +134,10 @@ namespace SRMultiplayer.Networking
                 case PacketType.RaceEnd: OnRaceEnd(new PacketRaceEnd(im), player); break;
                 case PacketType.RaceTime: OnRaceTime(new PacketRaceTime(im), player); break;
                 case PacketType.RaceTrigger: OnRaceTrigger(new PacketRaceTrigger(im), player); break;
+                #if SRML
                 // Mod Compatibility
                 case PacketType.SetNickname: OnSetNickname(new PacketSetNickname(im), player); break;
+                #endif                
                 default:
                     SRMP.Log($"Got unhandled packet from {player}:  {type}" + Enum.GetName(typeof(PacketType), type));
                     break;
@@ -1735,7 +1737,9 @@ namespace SRMultiplayer.Networking
                 {
                     ID = g.Gordo.id, 
                     Model = g.Gordo.gordoModel,
+                    #if SRML
                     NicknameModValue = nicknamesEnabled ? (string)g.GetComponent(AccessTools.TypeByName("Nicknames.GordoNickname")).GetField("Name") : null,
+                    #endif
                 }).ToList()
             }.Send(player, NetDeliveryMethod.ReliableOrdered);
 
@@ -1791,6 +1795,7 @@ namespace SRMultiplayer.Networking
         }
         #endregion
         
+        #if SRML
         #region Mod Compatibility
         private static void OnSetNickname(PacketSetNickname packet, NetworkPlayer player)
         {
@@ -1814,5 +1819,6 @@ namespace SRMultiplayer.Networking
             packet.SendToAllExcept(player);
         }
         #endregion
+        #endif
     }
 }

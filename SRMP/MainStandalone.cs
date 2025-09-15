@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using SRMultiplayer.Networking;
 using System.IO;
 using System.Reflection;
+using SRMultiplayer.EpicSDK;
 using UnityCoreMod;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace SRMultiplayer
 {   // <summary>
     /// Handles mod being loaded from directly without the mod loader
     /// </summary>
-    public class MainSaty : IUnityMod
+    public class MainStandalone : IUnityMod
     {
         private static GameObject m_GameObject;
 

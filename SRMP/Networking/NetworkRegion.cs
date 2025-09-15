@@ -53,8 +53,9 @@ namespace SRMultiplayer.Networking
                     PlortModel = a.DestroyPlortAfterTime != null ? a.DestroyPlortAfterTime.plortModel : null,
                     SlimeModel = a.SlimeEat != null ? a.SlimeEat.slimeModel : null,
                     ProduceModel = a.ResourceCycle != null ? a.ResourceCycle.model : null,
+#if SRML
                     NicknameModValue = nicknamesEnabled ? (string)a.GetComponent(AccessTools.TypeByName("Nicknames.SlimeNickname")).GetField("Name") : null,
-                    
+#endif            
                 }).ToList()
             }.Send(player);
             //SRMP.Log($"{player} loaded into {name} with {netActors.Count} unknown network actors ({Region.members.GetCount()} actors total)");
