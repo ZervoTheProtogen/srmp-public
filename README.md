@@ -1,7 +1,4 @@
-# ~~SRMP EOS Fork~~ SRMP Continued Fork
-This fork is a modification of the original SRMP that adds mod support and EOS lobbies. Server codes are a 98% working feature now!
-
-# Original SRMP README.md
+# SRMP
 This is the code for the Slime Rancher MultiPlayer Mod (SRMP) by SatyPardus.
 
 You can join our discord here: https://discord.gg/Qp8SmuQ 
