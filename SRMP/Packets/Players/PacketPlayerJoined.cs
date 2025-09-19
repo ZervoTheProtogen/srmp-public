@@ -11,6 +11,7 @@ namespace SRMultiplayer.Packets
     {
         public byte ID;
         public string Username;
+        public bool VR;
 
         public PacketPlayerJoined() { }
         public PacketPlayerJoined(NetIncomingMessage im) { Deserialize(im); }

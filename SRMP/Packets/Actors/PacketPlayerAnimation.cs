@@ -23,7 +23,7 @@ namespace SRMultiplayer.Packets
 
         public byte ID;
         public byte Type;
-        public struct animateData
+        public struct AnimationData
         {
             public byte type
             {
@@ -42,23 +42,23 @@ namespace SRMultiplayer.Packets
             public ulong? uData;
         }
 
-        public Queue<animateData> internalData { get; set; } = new Queue<animateData>();
+        public Queue<AnimationData> internalData { get; set; } = new Queue<AnimationData>();
 
         public void Add<T>(T obj)
         {
             switch (obj)
             {
                 case float itm:
-                    internalData.Enqueue(new animateData() { fData = itm });
+                    internalData.Enqueue(new AnimationData() { fData = itm });
                     break;
                 case bool itm:
-                    internalData.Enqueue(new animateData() { bData = itm });
+                    internalData.Enqueue(new AnimationData() { bData = itm });
                     break;
                 case int itm:
-                    internalData.Enqueue(new animateData() { iData = itm });
+                    internalData.Enqueue(new AnimationData() { iData = itm });
                     break;
                 case ulong itm:
-                    internalData.Enqueue(new animateData() { uData = itm });
+                    internalData.Enqueue(new AnimationData() { uData = itm });
                     break;
             }
         }
@@ -103,11 +103,11 @@ namespace SRMultiplayer.Packets
         {
             base.Deserialize(im);
 
-            internalData = new Queue<animateData>();
+            internalData = new Queue<AnimationData>();
             int Count = im.ReadInt32();
             for (int i = 0; i < Count; i++)
             {
-                var data = new animateData();
+                var data = new AnimationData();
                 byte type = im.ReadByte();
                 switch (type)
                 {

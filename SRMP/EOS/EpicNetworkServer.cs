@@ -57,6 +57,8 @@ namespace SRMultiplayer.Networking
             Globals.LocalPlayer.ID = id;
             Globals.LocalPlayer.Username = Globals.Username;
             Globals.LocalPlayer.HasLoaded = true;
+            var _ = Globals.Mods; // Make sure mods list is set up to check for vr
+            Globals.LocalPlayer.IsVR = Globals.VRInstalled;
             Globals.LocalPlayer.Spawn();
             Globals.Players.Add(id, Globals.LocalPlayer);
             Globals.PlayerToEpic.Add(id, EpicApplication.Instance.Authentication.ProductUserId);
@@ -272,6 +274,7 @@ namespace SRMultiplayer.Networking
             for (var i = 0; i < modsLen; i++)
                 mods.Add(im.ReadString());
 
+            var vr = im.ReadBoolean();
             
             if (build != Globals.Version)
             {
@@ -292,12 +295,14 @@ namespace SRMultiplayer.Networking
             new PacketPlayerJoined()
             {
                 ID = pid,
-                Username = username
+                Username = username,
+                VR = vr
             }.SendToAllExcept(player, NetDeliveryMethod.ReliableOrdered);
             
             player.UUID = new Guid(guid);
             player.Username = username;
             player.name = $"{username} ({pid})";
+            player.IsVR = vr;
 
             NetOutgoingMessage hail = new NetOutgoingMessage();
             
@@ -311,6 +316,7 @@ namespace SRMultiplayer.Networking
                 hail.Write(p.ID);
                 hail.Write(p.Username);
                 hail.Write(p.HasLoaded);
+                hail.Write(p.IsVR);
             }
             hail.Write(Globals.PartyID.ToByteArray());
             hail.Write((byte)SRSingleton<SceneContext>.Instance.GameModel.currGameMode);

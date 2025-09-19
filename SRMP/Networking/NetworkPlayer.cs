@@ -28,6 +28,9 @@ namespace SRMultiplayer.Networking
         public NetworkPlayerState State;
 
         public bool HasLoaded;
+
+        public bool IsVR;
+        
         public RegionRegistry.RegionSetId CurrentRegionSet
         {
             get
@@ -102,7 +105,7 @@ namespace SRMultiplayer.Networking
         private void Update()
         {
             if (!HasLoaded) return;
-
+            
             if(IsLocal)
             {
                 m_MovementUpdateTimer -= Time.deltaTime;
@@ -144,12 +147,15 @@ namespace SRMultiplayer.Networking
                 m_ActualRotation = Mathf.LerpAngle(m_PreviousRotation, m_LatestRotation, t);
                 transform.eulerAngles = new Vector3(0, m_ActualRotation, 0);
 
-                if (m_Animator != null)
+                if (m_Animator != null && !IsVR)
                 {
                     m_ActualWeaponY = Mathf.LerpAngle(m_PreviousWeaponY, m_LatestWeaponY, t);
                     m_Animator.SetFloat("WeaponY", m_ActualWeaponY);
                 }
             }
+            
+            if (IsVR)
+                VRPlayerUpdate();
         }
 
         public float GetWeaponLocation()
@@ -157,16 +163,6 @@ namespace SRMultiplayer.Networking
             return m_ActualWeaponY;
         } 
 
-        private void OnAnimatorIK()
-        {
-            if(m_Animator != null && m_LeftHandTarget != null)
-            {
-                m_Animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1);
-                m_Animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 1);
-                m_Animator.SetIKPosition(AvatarIKGoal.LeftFoot, m_LeftHandTarget.position);
-                m_Animator.SetIKRotation(AvatarIKGoal.LeftFoot, m_LeftHandTarget.rotation);
-            }
-        }
 
         public void UpdateWeaponRotation(float angle)
         {
@@ -312,8 +308,12 @@ namespace SRMultiplayer.Networking
                 cameraObj.SetActive(false);
 
                 m_Camera = cameraObj;
-            }
 
+                IsVR = Globals.VRInstalled;
+            }
+            
+            GetVRObjects();
+            
             PlayerObj.SetActive(true);
         }
 

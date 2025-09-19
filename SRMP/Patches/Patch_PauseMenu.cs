@@ -18,12 +18,9 @@ namespace SRMultiplayer.Patches
         {
             if (!Globals.IsMultiplayer) return;
 
-            //only handle the client if the client is the one disconnecting
-            if (Globals.IsClient)
-                EpicApplication.Instance.Lobby.LeaveLobby();
-            //if server ahndle the shutdown
-            if (Globals.IsServer)
-                EpicApplication.Instance.Lobby.DestroyLobby();
+            EpicApplication.Instance.Lobby.LeaveLobby();
+                
+            EpicApplication.Instance.Lobby.DestroyLobby();
         }
     }
 

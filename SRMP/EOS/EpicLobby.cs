@@ -256,7 +256,7 @@ namespace SRMultiplayer.EpicSDK
 
         public void LeaveLobby()
         {
-            if (!IsInLobby)
+            if (!IsInLobby || IsLobbyOwner)
                 return;
             
             var leaveLobbyOptions = new LeaveLobbyOptions()

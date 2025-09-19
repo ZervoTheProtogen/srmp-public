@@ -69,6 +69,8 @@ namespace SRMultiplayer
         public static Dictionary<ProductUserId, byte> EpicToPlayer = new Dictionary<ProductUserId, byte>();
         public static Dictionary<byte, ProductUserId> PlayerToEpic = new Dictionary<byte, ProductUserId>();
 
+        internal static Dictionary<PacketType, Type> CustomPackets = new Dictionary<PacketType, Type>();
+        
         /// <summary>
         /// get list of current installed mods
         /// Excluding supporting files
@@ -81,6 +83,9 @@ namespace SRMultiplayer
                 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
                 foreach (var assembly in assemblies)
                 {
+                    if (assembly.GetName().Name.Equals("SRVR"))
+                        VRInstalled = true;
+                    
                     if (
                         // Main
                         !assembly.GetName().Name.Contains("Unity") && !assembly.GetName().Name.Contains("InControl") && !assembly.GetName().Name.Contains("DOTween") &&
@@ -93,6 +98,9 @@ namespace SRMultiplayer
                         // Unity Explorer (Debugging)
                         !assembly.GetName().Name.Equals("UniverseLib.Mono") && !assembly.GetName().Name.Contains("eval-")  && !assembly.GetName().Name.Equals("Tomlet") &&
                         !assembly.GetName().Name.Equals("mcs")
+                        
+                        // VR
+                        && !assembly.GetName().Name.Equals("Valve.Newtonsoft.Json") && !assembly.GetName().Name.Contains("VR")
                         
                         // Ignored Mods
                         && !UserData.IgnoredMods.Contains(assembly.GetName().Name))
@@ -112,5 +120,8 @@ namespace SRMultiplayer
         }
 
         public static bool NicknamesModInstalled => Mods.Contains("Nicknames");
+        public static bool VRInstalled;
+        
+        
     }
 }

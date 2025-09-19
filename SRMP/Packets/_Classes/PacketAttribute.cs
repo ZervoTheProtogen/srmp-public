@@ -13,5 +13,6 @@ namespace SRMultiplayer.Packets
         {
             Type = type;
         }
+
     }
 }

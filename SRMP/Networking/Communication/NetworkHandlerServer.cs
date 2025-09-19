@@ -23,6 +23,19 @@ namespace SRMultiplayer.Networking
             if (!Globals.PacketSize.ContainsKey(type))
                 Globals.PacketSize.Add(type, 0);
             Globals.PacketSize[type] += im.LengthBytes;
+
+            if (Globals.CustomPackets.TryGetValue(type, out var packetClass))
+            {
+                Packet packet = (Packet)packetClass.GetConstructor(new Type[] { typeof(NetIncomingMessage) })?.Invoke(new object[] { im });
+                
+                if (packet != null)
+                    packet.InvokeMethod("HandleServer", packet, player);
+                else
+                    SRMP.Log($"Got unhandled packet from {player}:  {type}" + Enum.GetName(typeof(PacketType), type));
+                
+                return;
+            }
+            
             switch (type)
             {
                 //Player animation
@@ -137,6 +150,7 @@ namespace SRMultiplayer.Networking
                 #if SRML
                 // Mod Compatibility
                 case PacketType.SetNickname: OnSetNickname(new PacketSetNickname(im), player); break;
+                case PacketType.VRPositions: OnVRPositions(new PacketVRPositions(im), player); break;
                 #endif                
                 default:
                     SRMP.Log($"Got unhandled packet from {player}:  {type}" + Enum.GetName(typeof(PacketType), type));
@@ -1815,6 +1829,18 @@ namespace SRMultiplayer.Networking
                 
                 nicknameSlime.SetField("Name", packet.nickname);
             }
+            
+            packet.SendToAllExcept(player);
+        }
+
+        private static void OnVRPositions(PacketVRPositions packet, NetworkPlayer player)
+        {
+            //Globals.Players.TryGetValue(packet.ID, out var player)
+            
+            player.IsVR = true;
+
+            player.PositionRotationUpdateVR(packet);
+            player.UpdateHeadRotationVR(packet.headAngle);
             
             packet.SendToAllExcept(player);
         }

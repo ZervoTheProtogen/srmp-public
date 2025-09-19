@@ -1335,6 +1335,7 @@
     <Compile Include="Networking\NetworkNutcracker.cs" />
     <Compile Include="Networking\NetworkPlayer.Animation.cs" />
     <Compile Include="Networking\NetworkPlayer.cs" />
+    <Compile Include="Networking\NetworkPlayer.VR.cs" />
     <Compile Include="Networking\NetworkPlayerAmmo.cs" />
     <Compile Include="Networking\NetworkPlayerDisplayOnMap.cs" />
     <Compile Include="Networking\NetworkPlayerSave.cs" />
@@ -1389,6 +1390,7 @@
     <Compile Include="Packets\Gordos\PacketGordoEat.cs" />
     <Compile Include="Packets\ModCompat\PacketSetNickname.cs" />
     <Compile Include="Packets\ModCompat\PacketSpiritMode.cs" />
+    <Compile Include="Packets\ModCompat\PacketVRPositions.cs" />
     <Compile Include="Packets\Oasis\PacketOasis.cs" />
     <Compile Include="Packets\Oasis\PacketOasisLive.cs" />
     <Compile Include="Packets\FireColumn\PacketFireColumnActivate.cs" />
@@ -1561,6 +1563,7 @@
     <Compile Include="Utils\Compression.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Objects.cs" />
+    <Compile Include="Utils\UIUtils.cs" />
     <Compile Include="Utils\Utils.cs" />
   </ItemGroup>
   <ItemGroup>

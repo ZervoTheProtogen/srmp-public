@@ -333,6 +333,12 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
 
             GUILayout.BeginHorizontal();
             GUILayout.Label(player.Username);
+            if (player.IsVR)
+            {
+                GUI.contentColor = Color.cyan;
+                GUILayout.Label("VR");
+                GUI.contentColor = Color.white;
+            }
             if (GUILayout.Button("Kick"))
             {
                 NetworkServer.Instance.DisconnectKick(player);
@@ -356,7 +362,13 @@ public class MultiplayerUI : SRSingleton<MultiplayerUI>
             if (player.IsLocal) continue;
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label(player.Username);
+            GUILayout.Label(player.Username);        
+            if (player.IsVR)
+            {
+                GUI.contentColor = Color.cyan;
+                GUILayout.Label("VR");
+                GUI.contentColor = Color.white;
+            }
             GUILayout.EndHorizontal();
         }
         GUILayout.EndScrollView();

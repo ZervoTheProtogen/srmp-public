@@ -21,6 +21,20 @@ namespace SRMultiplayer.Networking
             if (!Globals.PacketSize.ContainsKey(type))
                 Globals.PacketSize.Add(type, 0);
             Globals.PacketSize[type] += im.LengthBytes;
+
+            if (Globals.CustomPackets.TryGetValue(type, out var packetClass))
+            {
+                Packet packet = (Packet)packetClass.GetConstructor(new[] { typeof(NetIncomingMessage) })
+                    ?.Invoke(new object[] { im });
+
+                if (packet != null)
+                    packet.InvokeMethod("HandleClient", packet);
+                else
+                    SRMP.Log($"Got unhandled packet:  {type}" + Enum.GetName(typeof(PacketType), type));
+
+                return;
+            }
+
             switch (type)
             {
                 //Player amimations
@@ -176,12 +190,13 @@ namespace SRMultiplayer.Networking
                 case PacketType.RaceEnd: OnRaceEnd(new PacketRaceEnd(im)); break;
                 case PacketType.RaceTime: OnRaceTime(new PacketRaceTime(im)); break;
                 case PacketType.RaceTrigger: OnRaceTrigger(new PacketRaceTrigger(im)); break;
-                
+
 #if SRML
                 // Mod Compatibility
                 case PacketType.SetNickname: OnSetNickname(new PacketSetNickname(im)); break;
+                case PacketType.VRPositions: OnVRPositions(new PacketVRPositions(im)); break;
 #endif
-                
+
                 default:
                     SRMP.Log($"Got unhandled packet: {type} " + Enum.GetName(typeof(PacketType), type));
                     break;
@@ -1323,10 +1338,7 @@ namespace SRMultiplayer.Networking
         }
 
         private static void OnWorldTime(PacketWorldTime packet)
-        {
-            SRSingleton<SceneContext>.Instance.TimeDirector.worldModel.worldTime = packet.Time;
-            SRMP.Log(packet.Time.ToString());
-        }
+            => SRSingleton<SceneContext>.Instance.TimeDirector.worldModel.worldTime = packet.Time;
 
         private static void OnWorldData(PacketWorldData packet)
         {
@@ -2312,6 +2324,7 @@ namespace SRMultiplayer.Networking
                 {
                     Globals.ClientLoaded = true;
                     SRMP.Log("Received all data, multiplayer fully loaded!", "CLIENT");
+                    player.IsVR = Globals.VRInstalled;
                 }
                 else
                 {
@@ -2342,6 +2355,7 @@ namespace SRMultiplayer.Networking
             var player = playerObj.AddComponent<NetworkPlayer>();
             player.ID = packet.ID;
             player.Username = packet.Username;
+            player.IsVR = packet.VR;
 
             Globals.Players.Add(packet.ID, player);
         }
@@ -2354,7 +2368,9 @@ namespace SRMultiplayer.Networking
         #endregion
 
 #if SRML
+
         #region Mod Compatibility
+
         private static void OnSetNickname(PacketSetNickname packet)
         {
             if (packet.type)
@@ -2362,7 +2378,7 @@ namespace SRMultiplayer.Networking
                 var gordo = Globals.Gordos[packet.gordoId];
 
                 var nicknameGordo = gordo.GetComponent(AccessTools.TypeByName("Nicknames.GordoNickname"));
-                
+
                 nicknameGordo.SetField("Name", packet.nickname);
             }
             else
@@ -2370,8 +2386,20 @@ namespace SRMultiplayer.Networking
                 var slime = Globals.Actors[packet.actorId];
 
                 var nicknameSlime = slime.GetComponent(AccessTools.TypeByName("Nicknames.SlimeNickname"));
-                
+
                 nicknameSlime.SetField("Name", packet.nickname);
+            }
+        }
+
+
+        private static void OnVRPositions(PacketVRPositions packet)
+        {
+            if (Globals.Players.TryGetValue(packet.ID, out var player))
+            {
+                player.IsVR = true;
+                
+                player.PositionRotationUpdateVR(packet);
+                player.UpdateHeadRotationVR(packet.headAngle);
             }
         }
         #endregion

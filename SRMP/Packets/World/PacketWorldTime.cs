@@ -14,11 +14,5 @@ namespace SRMultiplayer.Packets
 
         public PacketWorldTime() { }
         public PacketWorldTime(NetIncomingMessage im) { Deserialize(im); }
-
-        public override void Serialize(NetOutgoingMessage om)
-        {
-            base.Serialize(om);
-            SRMP.Log(Time.ToString());
-        }
     }
 }

@@ -88,7 +88,7 @@ namespace SRMultiplayer.Networking
             WriteParameters(writer);
         }
 
-        public void ReadAnimatorLayer(Queue<animateData> im)
+        public void ReadAnimatorLayer(Queue<AnimationData> im)
         {
             if (m_Animator == null) return;
 
@@ -135,7 +135,7 @@ namespace SRMultiplayer.Networking
             writer.Add(newSpeed);
         }
 
-        public void ReadAnimatorSpeed(Queue<animateData> im)
+        public void ReadAnimatorSpeed(Queue<AnimationData> im)
         {
             if (m_Animator == null) return;
 
@@ -276,7 +276,7 @@ namespace SRMultiplayer.Networking
             return dirtyBits != 0;
         }
 
-        public void ReadParameters(Queue<animateData> im)
+        public void ReadParameters(Queue<AnimationData> im)
         {   //make sure 
             if (m_Animator == null) return;
 

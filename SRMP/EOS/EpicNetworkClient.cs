@@ -139,6 +139,7 @@ namespace SRMultiplayer.Networking
                     byte id = im.ReadByte();
                     string username = im.ReadString();
                     bool hasloaded = im.ReadBoolean();
+                    bool isVR = im.ReadBoolean();
 
                     var playerObject = new GameObject($"{username} ({id})");
                     var player = playerObject.AddComponent<NetworkPlayer>();
@@ -147,12 +148,15 @@ namespace SRMultiplayer.Networking
                     player.ID = id;
                     player.Username = username;
                     player.HasLoaded = hasloaded;
+                    player.IsVR = isVR;
                     Globals.Players.Add(id, player);
 
                     if (id == Globals.LocalID)
                     {
                         Globals.LocalPlayer = player;
                     }
+                    if (isVR)
+                        SRMP.Log($"Player {id} is a VR player!");
                 }
                 Globals.PartyID = new Guid(im.ReadBytes(16));
                 var gameMode = (PlayerState.GameMode)im.ReadByte();
@@ -195,7 +199,9 @@ namespace SRMultiplayer.Networking
             om.Write(mods.Count);
             foreach (var mod in mods)
                 om.Write(mod);
-
+            
+            om.Write(Globals.VRInstalled);
+            
             SendDataInternal(serverUserId, om.Data);
         }
 
